@@ -16,7 +16,7 @@ import DoctorForm from "@/components/DoctorForm";
 export default function Form() {
   const { push } = useRouter();
 
-  const [isActiveForm, setIsActiveForm] = useState(0);
+  const [isActiveForm, setIsActiveForm] = useState(1);
 
   //   const getData = async () => {
   //     setIsLoading(true);
@@ -53,19 +53,54 @@ export default function Form() {
                     <div className="patients_info">
                       <ul>
                         <li
-                          className={isActiveForm === 0 ? "active" : ""}
-                          onClick={() => setIsActiveForm(0)}
+                          className={isActiveForm === 1 ? "active" : ""}
+                          onClick={() => setIsActiveForm(1)}
                         >
-                          <span>Personal Info</span>
+                          <span>Family History</span>
+                        </li>
+                        <li
+                          className={isActiveForm === 2 ? "active" : ""}
+                          onClick={() => setIsActiveForm(2)}
+                        >
+                          <span>Personal History</span>
+                        </li>
+                        <li
+                          className={isActiveForm === 3 ? "active" : ""}
+                          onClick={() => setIsActiveForm(3)}
+                        >
+                          <span>Case History</span>
+                        </li>
+                        <li
+                          className={isActiveForm === 4 ? "active" : ""}
+                          onClick={() => setIsActiveForm(4)}
+                        >
+                          <span>Cravings</span>
+                        </li>
+                        <li
+                          className={isActiveForm === 5 ? "active" : ""}
+                          onClick={() => setIsActiveForm(5)}
+                        >
+                          <span>Generalities</span>
+                        </li>
+                        <li
+                          className={isActiveForm === 6 ? "active" : ""}
+                          onClick={() => setIsActiveForm(6)}
+                        >
+                          <span>Doctor Details</span>
                         </li>
                       </ul>
                     </div>
 
                     <div className="row g-5 g-xl-8 justify-content-center">
                       <div className="col-md-6 col-12">
-                        {isActiveForm === 0 && <PersonalInfo />}
+                        {isActiveForm === 1 && <FamilyHistory />}
+                        {isActiveForm === 3 && <CashHistory />}
+                        {isActiveForm === 5 && <Generalities />}
+                        {isActiveForm === 6 && <DoctorForm />}
                       </div>
                     </div>
+                    {isActiveForm === 2 && <PersonalHistory />}
+                    {isActiveForm === 4 && <Cravings />}
                   </div>
                 </div>
               </div>

@@ -12,6 +12,7 @@ export default function PersonalInfo() {
     age: "",
     sex: "",
     address: "",
+    date: "",
   });
 
   const handleInput = (e) => {
@@ -32,6 +33,7 @@ export default function PersonalInfo() {
           age: "",
           sex: "",
           address: "",
+          date: "",
         });
       } else {
         toast.error("Product data is not added. Try Again!");
@@ -46,6 +48,19 @@ export default function PersonalInfo() {
       <div className="">
         <h1>Add Personal Info</h1>
         <div className="row pt-5">
+          <div className="col-12">
+            <div className="pb-5">
+              <label htmlFor="date">Booking Date</label>
+              <input
+                type="date"
+                className="form-control pb-2"
+                id="date"
+                name="date"
+                value={addForm?.date}
+                onChange={(e) => handleInput(e)}
+              />
+            </div>
+          </div>
           <div className="col-12">
             <div className="pb-5">
               <label htmlFor="patientId">Patient Id</label>

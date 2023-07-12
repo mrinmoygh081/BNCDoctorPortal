@@ -13,6 +13,7 @@ export default function Appointments() {
   const { loginToken } = useSelector((state) => state.authReducer);
   const { push } = useRouter();
   const [data, setData] = useState(null);
+  const router = useRouter();
 
   return (
     <>
@@ -38,32 +39,32 @@ export default function Appointments() {
                       <div className="col-12">
                         <div className="card card-xxl-stretch mb-5 mb-xxl-8">
                           <div className="table-header">
-                            <div className="card-header border-0 pt-5">
-                              <h3 className="card-title align-items-start flex-column">
+                            <div className="card-header border-0 pt-5 w-100">
+                              <h3 className="card-title align-items-start flex-column w-100">
                                 <span className="card-label fw-bold fs-3 mb-1">
                                   Appointments
                                 </span>
-                                <span className="text-muted mt-1 fw-semibold fs-7">
+                                <span className="text-muted mt-1 fw-semibold fs-7 w-100">
                                   Total appointments: {data && data.length}
                                 </span>
                               </h3>
                             </div>
-                            <div className="card-header border-0 pt-5">
-                              <h3 className="card-title align-items-start flex-column">
+                            <div className="card-header border-0 pt-5 w-100">
+                              <h3 className="card-title align-items-start flex-column w-100">
                                 <span className="card-label fw-bold fs-3 mb-1">
                                   Date
                                 </span>
-                                <span className="text-muted mt-1 fw-semibold fs-7">
+                                <span className="text-muted mt-1 fw-semibold fs-7 w-100">
                                   <input type="date" className="form-control" />
                                 </span>
                               </h3>
                             </div>
-                            <div className="card-header border-0 pt-5">
-                              <h3 className="card-title align-items-start flex-column">
+                            <div className="card-header border-0 pt-5 w-100">
+                              <h3 className="card-title align-items-start flex-column w-100">
                                 <span className="card-label fw-bold fs-3 mb-1">
                                   Search
                                 </span>
-                                <span className="text-muted mt-1 fw-semibold fs-7">
+                                <span className="text-muted mt-1 fw-semibold fs-7 w-100">
                                   <input
                                     type="text"
                                     className="form-control"
@@ -80,13 +81,33 @@ export default function Appointments() {
                                   <thead>
                                     <tr className="border-0">
                                       <th>Patient ID</th>
+                                      <th>Date</th>
                                       <th>Name</th>
                                       <th>Phone</th>
                                       <th className=" min-w-140px">Action</th>
                                     </tr>
                                   </thead>
                                   <tbody>
-                                    {data &&
+                                    <tr>
+                                      <td className="fw-semibold">1234567</td>
+                                      <td>26.07.2023</td>
+                                      <td>Mrinmoy</td>
+                                      <td>8240491818</td>
+                                      <td>
+                                        <button
+                                          onClick={() =>
+                                            router.push(
+                                              "./appointments-case-add"
+                                            )
+                                          }
+                                          title="Add Case History"
+                                          className="btn btn-icon btn-light btn-active-color-primary btn-sm me-1"
+                                        >
+                                          <FontAwesomeIcon icon={faPen} />
+                                        </button>
+                                      </td>
+                                    </tr>
+                                    {/* {data &&
                                       data.map((item, index) => (
                                         <tr key={index}>
                                           <td className="fw-semibold">
@@ -101,7 +122,7 @@ export default function Appointments() {
                                             </button>
                                           </td>
                                         </tr>
-                                      ))}
+                                      ))} */}
                                   </tbody>
                                 </table>
                               </div>

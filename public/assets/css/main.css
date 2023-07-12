@@ -54,7 +54,6 @@ ul {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  flex-wrap: wrap;
 }
 
 .table_height tbody {
@@ -216,6 +215,9 @@ ul {
 @media (max-width: 799px) {
   .toggleBtn {
     width: 50%;
+  }
+  .table-header {
+    flex-wrap: wrap;
   }
 }
 
