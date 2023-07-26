@@ -6,32 +6,28 @@ import { getAPI, postAPI, putAPI } from "@/utils/fetchAPIs";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 import PersonalInfo from "@/components/PersonalInfo";
-import FamilyHistory from "@/components/FamilyHistory";
-import PersonalHistory from "@/components/PersonalHistory";
-import Cravings from "@/components/Cravings";
-import Generalities from "@/components/Generalities";
-import CashHistory from "@/components/CashHistory";
-import DoctorForm from "@/components/DoctorForm";
+import Select from "react-select";
+import makeAnimated from "react-select/animated";
+import PersonalInfoOld from "@/components/PersonalInfoOld";
 
 export default function Form() {
+  const animatedComponents = makeAnimated();
   const { push } = useRouter();
+  const [patientType, setPatientType] = useState("new");
+  const [form, setForm] = useState({
+    date: "",
+    patientId: "",
+    name: "",
+    phone: "",
+    sex: "",
+    age: "",
+    address: "",
+  });
 
-  const [isActiveForm, setIsActiveForm] = useState(0);
-
-  //   const getData = async () => {
-  //     setIsLoading(true);
-  //     const data = await getAPI("productlines", null);
-  //     if (data?.status) {
-  //       setProductLines(data?.data);
-  //       setIsLoading(false);
-  //     } else {
-  //       setIsLoading(false);
-  //       toast.error("Something went wrong", data?.message);
-  //     }
-  //   };
-  //   useEffect(() => {
-  //     // getData();
-  //   }, []);
+  const addBtn = async () => {
+    const data = await postAPI("addAppointment", form, null);
+    console.log(data);
+  };
 
   return (
     <>
@@ -52,10 +48,7 @@ export default function Form() {
                   <div className="container-xxl">
                     <div className="patients_info">
                       <ul>
-                        <li
-                          className={isActiveForm === 0 ? "active" : ""}
-                          onClick={() => setIsActiveForm(0)}
-                        >
+                        <li className={"active"}>
                           <span>Personal Info</span>
                         </li>
                       </ul>
@@ -63,7 +56,32 @@ export default function Form() {
 
                     <div className="row g-5 g-xl-8 justify-content-center">
                       <div className="col-md-6 col-12">
-                        {isActiveForm === 0 && <PersonalInfo />}
+                        <div className="pb-5">
+                          <label htmlFor="patient">Type Of Patient</label>
+                          <Select
+                            options={[
+                              { value: "new", label: "New Patient" },
+                              { value: "old", label: "Old Patient" },
+                            ]}
+                            components={animatedComponents}
+                            defaultValue={{
+                              value: "new",
+                              label: "New Patient",
+                            }}
+                            isMulti={false}
+                            onChange={(e) => setPatientType(e.value)}
+                          ></Select>
+                        </div>
+                      </div>
+                      <div className="col-md-6 col-12">
+                        {patientType == "new" && (
+                          <PersonalInfo
+                            form={form}
+                            setForm={setForm}
+                            addBtn={addBtn}
+                          />
+                        )}
+                        {patientType == "old" && <PersonalInfoOld />}
                       </div>
                     </div>
                   </div>

@@ -3,44 +3,12 @@ import Select from "react-select";
 import makeAnimated from "react-select/animated";
 import { chooseSexOptions } from "@/utils/choose";
 
-export default function PersonalInfo() {
+export default function PersonalInfo({ form, setForm, addBtn }) {
   const animatedComponents = makeAnimated();
-  const [addForm, setAddForm] = useState({
-    patientId: "",
-    name: "",
-    phone: "",
-    age: "",
-    sex: "",
-    address: "",
-    date: "",
-  });
 
   const handleInput = (e) => {
     const { name, value } = e.target;
-    setAddForm({ ...addForm, [name]: value });
-  };
-
-  const addBtn = async () => {
-    if (addForm?.productline_name !== "") {
-      const data = await postAPI("productlines", addForm, null);
-      if (data?.status) {
-        toast.success("Product Line is added succesfully");
-        await getData();
-        setAddForm({
-          patientId: "",
-          name: "",
-          phone: "",
-          age: "",
-          sex: "",
-          address: "",
-          date: "",
-        });
-      } else {
-        toast.error("Product data is not added. Try Again!");
-      }
-    } else {
-      toast.error("Please fill all the fields");
-    }
+    setForm({ ...form, [name]: value });
   };
 
   return (
@@ -56,7 +24,7 @@ export default function PersonalInfo() {
                 className="form-control pb-2"
                 id="date"
                 name="date"
-                value={addForm?.date}
+                value={form?.date}
                 onChange={(e) => handleInput(e)}
               />
             </div>
@@ -69,7 +37,7 @@ export default function PersonalInfo() {
                 className="form-control pb-2"
                 id="patientId"
                 name="patientId"
-                value={addForm?.patientId}
+                value={form?.patientId}
                 onChange={(e) => handleInput(e)}
               />
             </div>
@@ -82,7 +50,7 @@ export default function PersonalInfo() {
                 className="form-control pb-2"
                 id="name"
                 name="name"
-                value={addForm?.name}
+                value={form?.name}
                 onChange={(e) => handleInput(e)}
               />
             </div>
@@ -95,7 +63,7 @@ export default function PersonalInfo() {
                 className="form-control pb-2"
                 id="phone"
                 name="phone"
-                value={addForm?.phone}
+                value={form?.phone}
                 onChange={(e) => handleInput(e)}
               />
             </div>
@@ -107,6 +75,8 @@ export default function PersonalInfo() {
                 options={chooseSexOptions}
                 components={animatedComponents}
                 isMulti={false}
+                name="sex"
+                onChange={(e) => setForm({ ...form, sex: e.value })}
               ></Select>
             </div>
           </div>
@@ -118,7 +88,7 @@ export default function PersonalInfo() {
                 className="form-control pb-2"
                 id="age"
                 name="age"
-                value={addForm?.age}
+                value={form?.age}
                 onChange={(e) => handleInput(e)}
               />
             </div>
@@ -131,7 +101,7 @@ export default function PersonalInfo() {
             className="form-control pb-2"
             id="address"
             name="address"
-            value={addForm?.address}
+            value={form?.address}
             onChange={(e) => handleInput(e)}
           />
         </div>

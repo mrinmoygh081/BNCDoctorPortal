@@ -98,9 +98,9 @@ export default function Appointments() {
                                         </button>
                                         <button
                                           onClick={() =>
-                                            router.push("./case-history")
+                                            router.push("./case-reporting")
                                           }
-                                          title="Cash History"
+                                          title="Cash Reporting"
                                           className="btn btn-icon btn-light btn-active-color-primary btn-sm me-1"
                                         >
                                           <FontAwesomeIcon icon={faHistory} />

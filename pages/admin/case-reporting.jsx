@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Head from "next/head";
 import React from "react";
 
-function CaseHistory() {
+function CaseReporting() {
   return (
     <>
       <Head>
@@ -73,4 +73,4 @@ function CaseHistory() {
   );
 }
 
-export default CaseHistory;
+export default CaseReporting;

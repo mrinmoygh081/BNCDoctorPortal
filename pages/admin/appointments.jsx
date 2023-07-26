@@ -3,7 +3,7 @@ import SideBar from "@/components/SideBar";
 import Header from "@/components/Header";
 import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPen } from "@fortawesome/free-solid-svg-icons";
+import { faHistory, faPen } from "@fortawesome/free-solid-svg-icons";
 import { getAPI, postAPI, putAPI } from "@/utils/fetchAPIs";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
@@ -100,10 +100,19 @@ export default function Appointments() {
                                               "./appointments-case-add"
                                             )
                                           }
-                                          title="Add Case History"
+                                          title="Update Appointments"
                                           className="btn btn-icon btn-light btn-active-color-primary btn-sm me-1"
                                         >
                                           <FontAwesomeIcon icon={faPen} />
+                                        </button>
+                                        <button
+                                          onClick={() =>
+                                            router.push("./case-reporting")
+                                          }
+                                          title="Cash Reporting"
+                                          className="btn btn-icon btn-light btn-active-color-primary btn-sm me-1"
+                                        >
+                                          <FontAwesomeIcon icon={faHistory} />
                                         </button>
                                       </td>
                                     </tr>

@@ -6,7 +6,7 @@ export async function query({ query, values = [] }) {
     port: "3306",
     user: "mrinmoy",
     password: "123456",
-    database: "opl",
+    database: "doctorportal",
     multipleStatements: true,
   });
 
