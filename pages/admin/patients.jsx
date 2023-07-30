@@ -9,12 +9,21 @@ import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
 
-export default function Appointments() {
+export default function Patients() {
   const { loginToken } = useSelector((state) => state.authReducer);
-  const { push } = useRouter();
+  const router = useRouter();
   const [data, setData] = useState(null);
 
-  const router = useRouter();
+  const getPatients = async () => {
+    const d = await getAPI("patients", null);
+    if (d?.status) {
+      setData(d.data);
+    }
+  };
+
+  useEffect(() => {
+    getPatients();
+  }, []);
 
   return (
     <>
@@ -76,37 +85,46 @@ export default function Appointments() {
                                       <th>Phone</th>
                                       <th>Sex</th>
                                       <th>Age</th>
+                                      <th>Address</th>
                                       <th className=" min-w-140px">Action</th>
                                     </tr>
                                   </thead>
                                   <tbody>
-                                    <tr>
-                                      <td>8754684</td>
-                                      <td>Mrinmoy Ghosh</td>
-                                      <td>8240491818</td>
-                                      <td>Male</td>
-                                      <td>27</td>
-                                      <td>
-                                        <button
-                                          onClick={() =>
-                                            router.push("./patients/1")
-                                          }
-                                          title="Check Details"
-                                          className="btn btn-icon btn-light btn-active-color-primary btn-sm me-1"
-                                        >
-                                          <FontAwesomeIcon icon={faEye} />
-                                        </button>
-                                        <button
-                                          onClick={() =>
-                                            router.push("./case-reporting")
-                                          }
-                                          title="Cash Reporting"
-                                          className="btn btn-icon btn-light btn-active-color-primary btn-sm me-1"
-                                        >
-                                          <FontAwesomeIcon icon={faHistory} />
-                                        </button>
-                                      </td>
-                                    </tr>
+                                    {data &&
+                                      data.map((item, index) => (
+                                        <tr key={index}>
+                                          <td>{item?.patient_id}</td>
+                                          <td>{item?.name}</td>
+                                          <td>{item?.phone}</td>
+                                          <td>{item?.sex}</td>
+                                          <td>{item?.age}</td>
+                                          <td>{item?.address}</td>
+                                          <td>
+                                            <button
+                                              onClick={() =>
+                                                router.push(
+                                                  `./patients/${item?.patient_id}`
+                                                )
+                                              }
+                                              title="Check Details"
+                                              className="btn btn-icon btn-light btn-active-color-primary btn-sm me-1"
+                                            >
+                                              <FontAwesomeIcon icon={faEye} />
+                                            </button>
+                                            <button
+                                              onClick={() =>
+                                                router.push("./case-reporting")
+                                              }
+                                              title="Cash Reporting"
+                                              className="btn btn-icon btn-light btn-active-color-primary btn-sm me-1"
+                                            >
+                                              <FontAwesomeIcon
+                                                icon={faHistory}
+                                              />
+                                            </button>
+                                          </td>
+                                        </tr>
+                                      ))}
                                   </tbody>
                                 </table>
                               </div>

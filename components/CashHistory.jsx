@@ -1,14 +1,17 @@
-import { getDateToday } from "@/utils/getDateTimeNow";
 import React, { useEffect, useState } from "react";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
 import { chooseDiseaseOptions } from "@/utils/choose";
+import DatePicker from "react-datepicker";
+
+import "react-datepicker/dist/react-datepicker.css";
 
 export default function CashHistory() {
   const animatedComponents = makeAnimated();
-  const today = getDateToday();
+  const [selectedDate, setSelectedDate] = useState(new Date());
+
   const [addForm, setAddForm] = useState({
-    date: today,
+    date: new Date(),
     remark: "",
   });
 
@@ -46,22 +49,42 @@ export default function CashHistory() {
       <div className="">
         <h1>Add Cash History</h1>
         <div className="row pt-5">
-          <div className="col-12">
+          <div className="col-md-4 col-12">
             <div className="pb-5">
-              <label htmlFor="date">Date</label>
-              <input
+              <label htmlFor="date">Date</label> <br />
+              {/* <input
                 type="date"
                 className="form-control pb-2"
                 id="date"
                 name="date"
                 value={addForm?.date}
                 onChange={(e) => handleInput(e)}
+              /> */}
+              <DatePicker
+                selected={selectedDate}
+                className="form-control pb-2"
+                value={addForm?.date}
+                onChange={(date) => {
+                  setSelectedDate(date);
+                  setAddForm({ ...addForm, date: date.toLocaleDateString() });
+                }}
+                minDate={new Date()}
               />
             </div>
           </div>
-          <div className="col-12">
+          <div className="col-md-4 col-12">
             <div className="pb-5">
-              <label htmlFor="diseases">Diseases</label>
+              <label htmlFor="paternal">Diseases</label>
+              <Select
+                options={chooseDiseaseOptions}
+                components={animatedComponents}
+                isMulti={true}
+              ></Select>
+            </div>
+          </div>
+          <div className="col-md-4 col-12">
+            <div className="pb-5">
+              <label htmlFor="diseases">Disease Image</label>
               <input
                 type="file"
                 className="form-control pb-2"
@@ -74,21 +97,11 @@ export default function CashHistory() {
           </div>
           <div className="col-12">
             <div className="pb-5">
-              <label htmlFor="paternal">Diseases</label>
-              <Select
-                options={chooseDiseaseOptions}
-                components={animatedComponents}
-                isMulti={true}
-              ></Select>
-            </div>
-          </div>
-          <div className="col-12">
-            <div className="pb-5">
               <label htmlFor="remark">Remark</label>
               <textarea
                 name="remark"
                 id="remark"
-                rows="8"
+                rows="6"
                 className="form-control pb-2"
                 value={addForm?.remark}
                 onChange={(e) => handleInput(e)}

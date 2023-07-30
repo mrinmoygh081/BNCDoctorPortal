@@ -12,26 +12,21 @@ import Cravings from "@/components/Cravings";
 import Generalities from "@/components/Generalities";
 import CashHistory from "@/components/CashHistory";
 import DoctorForm from "@/components/DoctorForm";
+import LoadingView from "@/components/LoadingView";
 
 export default function Form() {
-  const { push } = useRouter();
+  const { push, query } = useRouter();
 
   const [isActiveForm, setIsActiveForm] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
 
-  //   const getData = async () => {
-  //     setIsLoading(true);
-  //     const data = await getAPI("productlines", null);
-  //     if (data?.status) {
-  //       setProductLines(data?.data);
-  //       setIsLoading(false);
-  //     } else {
-  //       setIsLoading(false);
-  //       toast.error("Something went wrong", data?.message);
-  //     }
-  //   };
-  //   useEffect(() => {
-  //     // getData();
-  //   }, []);
+  useEffect(() => {
+    if (query) {
+      setIsLoading(true);
+    }
+  }, [query]);
+
+  const addBtn = async () => {};
 
   return (
     <>
@@ -42,71 +37,77 @@ export default function Form() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <div className="d-flex flex-column flex-root">
-          <div className="page d-flex flex-row flex-column-fluid">
-            <SideBar />
-            <div className="wrapper d-flex flex-column flex-row-fluid">
-              <Header />
-              <div className="content d-flex flex-column flex-column-fluid">
-                <div className="py_40 shadow screen_header">
-                  <div className="container-xxl">
-                    <div className="patients_info">
-                      <ul>
-                        <li
-                          className={isActiveForm === 1 ? "active" : ""}
-                          onClick={() => setIsActiveForm(1)}
-                        >
-                          <span>Family History</span>
-                        </li>
-                        <li
-                          className={isActiveForm === 2 ? "active" : ""}
-                          onClick={() => setIsActiveForm(2)}
-                        >
-                          <span>Personal History</span>
-                        </li>
-                        <li
-                          className={isActiveForm === 3 ? "active" : ""}
-                          onClick={() => setIsActiveForm(3)}
-                        >
-                          <span>Case History</span>
-                        </li>
-                        <li
-                          className={isActiveForm === 4 ? "active" : ""}
-                          onClick={() => setIsActiveForm(4)}
-                        >
-                          <span>Cravings</span>
-                        </li>
-                        <li
-                          className={isActiveForm === 5 ? "active" : ""}
-                          onClick={() => setIsActiveForm(5)}
-                        >
-                          <span>Generalities</span>
-                        </li>
-                        <li
-                          className={isActiveForm === 6 ? "active" : ""}
-                          onClick={() => setIsActiveForm(6)}
-                        >
-                          <span>Doctor Details</span>
-                        </li>
-                      </ul>
-                    </div>
-
-                    <div className="row g-5 g-xl-8 justify-content-center">
-                      <div className="col-md-6 col-12">
-                        {isActiveForm === 1 && <FamilyHistory />}
-                        {isActiveForm === 3 && <CashHistory />}
-                        {isActiveForm === 5 && <Generalities />}
-                        {isActiveForm === 6 && <DoctorForm />}
+        {!isLoading ? (
+          <LoadingView />
+        ) : (
+          <div className="d-flex flex-column flex-root">
+            <div className="page d-flex flex-row flex-column-fluid">
+              <SideBar />
+              <div className="wrapper d-flex flex-column flex-row-fluid">
+                <Header />
+                <div className="content d-flex flex-column flex-column-fluid">
+                  <div className="py_40 shadow screen_header">
+                    <div className="container-xxl">
+                      <div className="patients_info">
+                        <ul>
+                          <li
+                            className={isActiveForm === 1 ? "active" : ""}
+                            onClick={() => setIsActiveForm(1)}
+                          >
+                            <span>Family History</span>
+                          </li>
+                          <li
+                            className={isActiveForm === 2 ? "active" : ""}
+                            onClick={() => setIsActiveForm(2)}
+                          >
+                            <span>Personal History</span>
+                          </li>
+                          <li
+                            className={isActiveForm === 3 ? "active" : ""}
+                            onClick={() => setIsActiveForm(3)}
+                          >
+                            <span>Case History</span>
+                          </li>
+                          <li
+                            className={isActiveForm === 4 ? "active" : ""}
+                            onClick={() => setIsActiveForm(4)}
+                          >
+                            <span>Cravings</span>
+                          </li>
+                          <li
+                            className={isActiveForm === 5 ? "active" : ""}
+                            onClick={() => setIsActiveForm(5)}
+                          >
+                            <span>Generalities</span>
+                          </li>
+                          <li
+                            className={isActiveForm === 6 ? "active" : ""}
+                            onClick={() => setIsActiveForm(6)}
+                          >
+                            <span>Doctor Details</span>
+                          </li>
+                        </ul>
                       </div>
+
+                      <div className="row g-5 g-xl-8 justify-content-center">
+                        <div className="col-md-6 col-12">
+                          {isActiveForm === 6 && <DoctorForm />}
+                        </div>
+                      </div>
+                      {isActiveForm === 5 && <Generalities />}
+                      {isActiveForm === 1 && <FamilyHistory />}
+                      {isActiveForm === 2 && (
+                        <PersonalHistory addBtn={addBtn} />
+                      )}
+                      {isActiveForm === 3 && <CashHistory />}
+                      {isActiveForm === 4 && <Cravings />}
                     </div>
-                    {isActiveForm === 2 && <PersonalHistory />}
-                    {isActiveForm === 4 && <Cravings />}
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
       </main>
     </>
   );

@@ -30,7 +30,7 @@ export default function DoctorForm() {
 
         <div className="text-end py-3">
           <button onClick={addBtn} className="btn fw-bold btn-primary">
-            CHOOSE DOCTOR
+            SAVE
           </button>
         </div>
       </div>

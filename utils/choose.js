@@ -58,3 +58,10 @@ export const chooseDiseaseOptions = [
 export const chooseDoctorOptions = [
   { value: "Dr. Doctor Name", label: "Dr. Doctor Name" },
 ];
+
+export const chooseMarritalStatusOptions = [
+  { value: "Married", label: "Married" },
+  { value: "Unmarried", label: "Unmarried" },
+  { value: "Widow", label: "Widow" },
+  { value: "Divorce", label: "Divorce" },
+];

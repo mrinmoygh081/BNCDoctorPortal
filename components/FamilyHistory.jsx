@@ -10,39 +10,139 @@ export default function FamilyHistory() {
   return (
     <>
       <div className="">
-        <h1>Add Family History</h1>
-        <div className="row pt-5">
-          <div className="col-12">
-            <div className="pb-5">
-              <label htmlFor="paternal">Paternal History</label>
-              <input
-                type="text"
-                className="form-control pb-2"
-                id="paternal"
-                name="paternal"
-                value={addForm?.paternal}
-                onChange={(e) => handleInput(e)}
-              />
-            </div>
-          </div>
-          <div className="col-12">
-            <div className="pb-5">
-              <label htmlFor="maternal">Maternal History</label>
-              <input
-                type="text"
-                className="form-control pb-2"
-                id="maternal"
-                name="maternal"
-                value={addForm?.maternal}
-                onChange={(e) => handleInput(e)}
-              />
-            </div>
-          </div>
+        <h1 className="pb-5">Add Family History</h1>
+        <div className="table-responsive">
+          <table className="table table-border">
+            <thead>
+              <tr>
+                <th scope="col">P/H</th>
+                <th scope="col">PATERNAL HISTORY</th>
+                <th scope="col">MATERNAL HISTORY</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">INFECTIVE</th>
+                <td>
+                  <input
+                    type="text"
+                    className="form-control pb-2"
+                    id="paternal"
+                    name="paternal"
+                    value={addForm?.paternal}
+                    onChange={(e) => handleInput(e)}
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    className="form-control pb-2"
+                    id="paternal"
+                    name="paternal"
+                    value={addForm?.paternal}
+                    onChange={(e) => handleInput(e)}
+                  />
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">NON-INFECTIVE</th>
+                <td>
+                  <input
+                    type="text"
+                    className="form-control pb-2"
+                    id="paternal"
+                    name="paternal"
+                    value={addForm?.paternal}
+                    onChange={(e) => handleInput(e)}
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    className="form-control pb-2"
+                    id="paternal"
+                    name="paternal"
+                    value={addForm?.paternal}
+                    onChange={(e) => handleInput(e)}
+                  />
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">SURGICAL</th>
+                <td>
+                  <input
+                    type="text"
+                    className="form-control pb-2"
+                    id="paternal"
+                    name="paternal"
+                    value={addForm?.paternal}
+                    onChange={(e) => handleInput(e)}
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    className="form-control pb-2"
+                    id="paternal"
+                    name="paternal"
+                    value={addForm?.paternal}
+                    onChange={(e) => handleInput(e)}
+                  />
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">OBS + GYNAE</th>
+                <td>
+                  <input
+                    type="text"
+                    className="form-control pb-2"
+                    id="paternal"
+                    name="paternal"
+                    value={addForm?.paternal}
+                    onChange={(e) => handleInput(e)}
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    className="form-control pb-2"
+                    id="paternal"
+                    name="paternal"
+                    value={addForm?.paternal}
+                    onChange={(e) => handleInput(e)}
+                  />
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">PARITY</th>
+                <td>
+                  <input
+                    type="text"
+                    className="form-control pb-2"
+                    id="paternal"
+                    name="paternal"
+                    value={addForm?.paternal}
+                    onChange={(e) => handleInput(e)}
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    className="form-control pb-2"
+                    id="paternal"
+                    name="paternal"
+                    value={addForm?.paternal}
+                    onChange={(e) => handleInput(e)}
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
 
         <div className="text-end py-3">
           <button onClick={addBtn} className="btn fw-bold btn-primary">
-            ADD FAMILY HISTORY
+            SAVE and NEXT
           </button>
         </div>
       </div>

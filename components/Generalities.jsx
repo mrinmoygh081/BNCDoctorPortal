@@ -17,10 +17,10 @@ export default function Generalities() {
 
   return (
     <>
-      <div className="">
+      <div>
         <h1>Add Generalities</h1>
         <div className="row pt-5">
-          <div className="col-12">
+          <div className="col-md-4 col-12">
             <div className="pb-5">
               <label htmlFor="sex">Sweat</label>
               <Select
@@ -30,7 +30,7 @@ export default function Generalities() {
               ></Select>
             </div>
           </div>
-          <div className="col-12">
+          <div className="col-md-4 col-12">
             <div className="pb-5">
               <label htmlFor="skin">Skin</label>
               <input
@@ -43,7 +43,7 @@ export default function Generalities() {
               />
             </div>
           </div>
-          <div className="col-12">
+          <div className="col-md-4 col-12">
             <div className="pb-5">
               <label htmlFor="teeth">Teeth+Gum</label>
               <input
@@ -56,7 +56,7 @@ export default function Generalities() {
               />
             </div>
           </div>
-          <div className="col-12">
+          <div className="col-md-4 col-12">
             <div className="pb-5">
               <label htmlFor="tongue">Tongue</label>
               <input
@@ -70,7 +70,7 @@ export default function Generalities() {
             </div>
           </div>
 
-          <div className="col-12">
+          <div className="col-md-4 col-12">
             <div className="pb-5">
               <label htmlFor="mental">Mental</label>
               <input
@@ -83,7 +83,7 @@ export default function Generalities() {
               />
             </div>
           </div>
-          <div className="col-12">
+          <div className="col-md-4 col-12">
             <div className="pb-5">
               <label htmlFor="mental">Thirst</label>
               <Select
@@ -93,7 +93,7 @@ export default function Generalities() {
               ></Select>
             </div>
           </div>
-          <div className="col-12">
+          <div className="col-md-4 col-12">
             <div className="pb-5">
               <label htmlFor="dreams">Dreams</label>
               <Select
@@ -107,7 +107,7 @@ export default function Generalities() {
 
         <div className="text-end py-3">
           <button onClick={addBtn} className="btn fw-bold btn-primary">
-            ADD GENERALITIES
+            SAVE and NEXT
           </button>
         </div>
       </div>

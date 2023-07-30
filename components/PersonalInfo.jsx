@@ -1,10 +1,14 @@
 import React, { useState } from "react";
+import DatePicker from "react-datepicker";
+
+import "react-datepicker/dist/react-datepicker.css";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
 import { chooseSexOptions } from "@/utils/choose";
 
 export default function PersonalInfo({ form, setForm, addBtn }) {
   const animatedComponents = makeAnimated();
+  const [selectedDate, setSelectedDate] = useState(new Date());
 
   const handleInput = (e) => {
     const { name, value } = e.target;
@@ -16,28 +20,29 @@ export default function PersonalInfo({ form, setForm, addBtn }) {
       <div className="">
         <h1>Add Personal Info</h1>
         <div className="row pt-5">
-          <div className="col-12">
+          <div className="col-md-6 col-12">
             <div className="pb-5">
               <label htmlFor="date">Booking Date</label>
-              <input
-                type="date"
+              <DatePicker
+                selected={selectedDate}
                 className="form-control pb-2"
-                id="date"
-                name="date"
-                value={form?.date}
-                onChange={(e) => handleInput(e)}
+                onChange={(date) => {
+                  setSelectedDate(date);
+                  setForm({ ...form, booking_date: date.toLocaleDateString() });
+                }}
+                minDate={new Date()}
               />
             </div>
           </div>
-          <div className="col-12">
+          <div className="col-md-6 col-12">
             <div className="pb-5">
-              <label htmlFor="patientId">Patient Id</label>
+              <label htmlFor="patient_id">Patient Id</label>
               <input
                 type="text"
                 className="form-control pb-2"
-                id="patientId"
-                name="patientId"
-                value={form?.patientId}
+                id="patient_id"
+                name="patient_id"
+                value={form?.patient_id}
                 onChange={(e) => handleInput(e)}
               />
             </div>
@@ -107,7 +112,10 @@ export default function PersonalInfo({ form, setForm, addBtn }) {
         </div>
 
         <div className="text-end py-3">
-          <button onClick={addBtn} className="btn fw-bold btn-primary">
+          <button
+            onClick={() => addBtn("new")}
+            className="btn fw-bold btn-primary"
+          >
             ADD PERSONAL INFO
           </button>
         </div>

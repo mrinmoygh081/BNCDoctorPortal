@@ -8,12 +8,24 @@ import { getAPI, postAPI, putAPI } from "@/utils/fetchAPIs";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
+import { formatDate } from "@/utils/getDateTimeNow";
 
 export default function Appointments() {
   const { loginToken } = useSelector((state) => state.authReducer);
   const { push } = useRouter();
   const [data, setData] = useState(null);
   const router = useRouter();
+
+  const getAppointments = async () => {
+    const d = await getAPI("appointments", null);
+    if (d?.status) {
+      setData(d.data);
+    }
+  };
+
+  useEffect(() => {
+    getAppointments();
+  }, []);
 
   return (
     <>
@@ -88,50 +100,43 @@ export default function Appointments() {
                                     </tr>
                                   </thead>
                                   <tbody>
-                                    <tr>
-                                      <td className="fw-semibold">1234567</td>
-                                      <td>26.07.2023</td>
-                                      <td>Mrinmoy</td>
-                                      <td>8240491818</td>
-                                      <td>
-                                        <button
-                                          onClick={() =>
-                                            router.push(
-                                              "./appointments-case-add"
-                                            )
-                                          }
-                                          title="Update Appointments"
-                                          className="btn btn-icon btn-light btn-active-color-primary btn-sm me-1"
-                                        >
-                                          <FontAwesomeIcon icon={faPen} />
-                                        </button>
-                                        <button
-                                          onClick={() =>
-                                            router.push("./case-reporting")
-                                          }
-                                          title="Cash Reporting"
-                                          className="btn btn-icon btn-light btn-active-color-primary btn-sm me-1"
-                                        >
-                                          <FontAwesomeIcon icon={faHistory} />
-                                        </button>
-                                      </td>
-                                    </tr>
-                                    {/* {data &&
+                                    {data &&
                                       data.map((item, index) => (
                                         <tr key={index}>
                                           <td className="fw-semibold">
-                                            {item?.productline_name}
+                                            {item?.patient_id}
                                           </td>
                                           <td>
+                                            {formatDate(item?.booking_date)}
+                                          </td>
+                                          <td>{item?.name}</td>
+                                          <td>{item?.phone}</td>
+                                          <td>
                                             <button
-                                              onClick={() => editIcon(item)}
+                                              onClick={() =>
+                                                router.push(
+                                                  `./appointments-case-add?patient_id=${item?.patient_id}`
+                                                )
+                                              }
+                                              title="Update Appointments"
                                               className="btn btn-icon btn-light btn-active-color-primary btn-sm me-1"
                                             >
                                               <FontAwesomeIcon icon={faPen} />
                                             </button>
+                                            <button
+                                              onClick={() =>
+                                                router.push("./case-reporting")
+                                              }
+                                              title="Cash Reporting"
+                                              className="btn btn-icon btn-light btn-active-color-primary btn-sm me-1"
+                                            >
+                                              <FontAwesomeIcon
+                                                icon={faHistory}
+                                              />
+                                            </button>
                                           </td>
                                         </tr>
-                                      ))} */}
+                                      ))}
                                   </tbody>
                                 </table>
                               </div>

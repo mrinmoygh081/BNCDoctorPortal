@@ -15,8 +15,8 @@ export default function Form() {
   const { push } = useRouter();
   const [patientType, setPatientType] = useState("new");
   const [form, setForm] = useState({
-    date: "",
-    patientId: "",
+    booking_date: "",
+    patient_id: "",
     name: "",
     phone: "",
     sex: "",
@@ -24,9 +24,25 @@ export default function Form() {
     address: "",
   });
 
-  const addBtn = async () => {
-    const data = await postAPI("addAppointment", form, null);
-    console.log(data);
+  const addBtn = async (flag) => {
+    // const data = await postAPI("addAppointment", form, null);
+    // console.log(data);
+    console.log(flag, form);
+    if (flag === "new") {
+      const data = await postAPI("appointments/new", form, null);
+      if (data?.status) {
+        toast.success(`Update: ${data?.message}`);
+      } else {
+        toast.error(`Update: ${data?.message}`);
+      }
+    } else if (flag === "old") {
+      const data = await postAPI("appointments/old", form, null);
+      if (data?.status) {
+        toast.success(`Update: ${data?.message}`);
+      } else {
+        toast.error(`Update: ${data?.message}`);
+      }
+    }
   };
 
   return (
@@ -81,7 +97,13 @@ export default function Form() {
                             addBtn={addBtn}
                           />
                         )}
-                        {patientType == "old" && <PersonalInfoOld />}
+                        {patientType == "old" && (
+                          <PersonalInfoOld
+                            form={form}
+                            setForm={setForm}
+                            addBtn={addBtn}
+                          />
+                        )}
                       </div>
                     </div>
                   </div>

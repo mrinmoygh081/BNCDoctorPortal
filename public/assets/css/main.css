@@ -216,6 +216,16 @@ label {
   left: 23px;
 }
 
+.table-border tr,
+.table-border td,
+.table-border th {
+  border: 1px solid #1a1a1a;
+}
+
+.react-datepicker-wrapper {
+  width: 100%;
+}
+
 @media (max-width: 799px) {
   .toggleBtn {
     width: 50%;
