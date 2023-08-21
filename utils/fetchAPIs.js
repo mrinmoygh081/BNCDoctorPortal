@@ -35,7 +35,6 @@ export const getAPI = (path, token) => {
       Authorization: `Bearer ${token}`,
     },
   };
-  console.log("config", config);
 
   return axios(config)
     .then((response) => {

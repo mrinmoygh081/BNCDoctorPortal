@@ -13,6 +13,8 @@ export default function Patients() {
   const { loginToken } = useSelector((state) => state.authReducer);
   const router = useRouter();
   const [data, setData] = useState(null);
+  const [search, setSearch] = useState("");
+  const [searchData, setSearchData] = useState(null);
 
   const getPatients = async () => {
     const d = await getAPI("patients", null);
@@ -24,6 +26,18 @@ export default function Patients() {
   useEffect(() => {
     getPatients();
   }, []);
+
+  useEffect(() => {
+    if (data) {
+      const s = data.filter(
+        (item) =>
+          item?.patient_id?.toLowerCase().includes(search.toLowerCase()) ||
+          item?.phone?.toLowerCase().includes(search.toLowerCase()) ||
+          item?.name?.toLowerCase().includes(search.toLowerCase())
+      );
+      setSearchData(s);
+    }
+  }, [search, data]);
 
   return (
     <>
@@ -55,7 +69,8 @@ export default function Patients() {
                                   Patients
                                 </span>
                                 <span className="text-muted mt-1 fw-semibold fs-7">
-                                  Total Patients: {data && data.length}
+                                  Total Patients:{" "}
+                                  {searchData && searchData.length}
                                 </span>
                               </h3>
                             </div>
@@ -64,11 +79,16 @@ export default function Patients() {
                                 <span className="card-label fw-bold fs-3 mb-1">
                                   Search
                                 </span>
-                                <span className="text-muted mt-1 fw-semibold fs-7">
+                                <span
+                                  className="text-muted mt-1 fw-semibold fs-7"
+                                  style={{ minWidth: "300px" }}
+                                >
                                   <input
                                     type="text"
                                     className="form-control"
-                                    placeholder="Search..."
+                                    placeholder="Search name, phone, patient id..."
+                                    value={search}
+                                    onChange={(e) => setSearch(e.target.value)}
                                   />
                                 </span>
                               </h3>
@@ -91,7 +111,8 @@ export default function Patients() {
                                   </thead>
                                   <tbody>
                                     {data &&
-                                      data.map((item, index) => (
+                                      searchData &&
+                                      searchData.map((item, index) => (
                                         <tr key={index}>
                                           <td>{item?.patient_id}</td>
                                           <td>{item?.name}</td>
