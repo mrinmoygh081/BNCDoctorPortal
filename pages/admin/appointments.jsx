@@ -2,22 +2,37 @@ import Head from "next/head";
 import SideBar from "@/components/SideBar";
 import Header from "@/components/Header";
 import React, { useEffect, useState } from "react";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHistory, faPen } from "@fortawesome/free-solid-svg-icons";
 import { getAPI, postAPI, putAPI } from "@/utils/fetchAPIs";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
-import { formatDate } from "@/utils/getDateTimeNow";
+import {
+  formatDate,
+  formattedDDMMYYYY,
+  getFormattedDate,
+} from "@/utils/getDateTimeNow";
 
 export default function Appointments() {
   const { loginToken } = useSelector((state) => state.authReducer);
   const { push } = useRouter();
   const [data, setData] = useState(null);
   const router = useRouter();
+  const [bookingDate, setBookingDate] = useState(getFormattedDate(new Date()));
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [search, setSearch] = useState("");
+  const [searchData, setSearchData] = useState(null);
 
   const getAppointments = async () => {
-    const d = await getAPI("appointments", null);
+    console.log(bookingDate);
+    const d = await postAPI(
+      "appointments",
+      { booking_date: bookingDate },
+      null
+    );
     if (d?.status) {
       setData(d.data);
     }
@@ -25,7 +40,19 @@ export default function Appointments() {
 
   useEffect(() => {
     getAppointments();
-  }, []);
+  }, [bookingDate]);
+
+  useEffect(() => {
+    if (data) {
+      const s = data.filter(
+        (item) =>
+          item?.patient_id?.toLowerCase().includes(search.toLowerCase()) ||
+          item?.phone?.toLowerCase().includes(search.toLowerCase()) ||
+          item?.name?.toLowerCase().includes(search.toLowerCase())
+      );
+      setSearchData(s);
+    }
+  }, [search, data]);
 
   return (
     <>
@@ -57,7 +84,8 @@ export default function Appointments() {
                                   Appointments
                                 </span>
                                 <span className="text-muted mt-1 fw-semibold fs-7 w-100">
-                                  Total appointments: {data && data.length}
+                                  Total appointments:{" "}
+                                  {searchData && searchData.length}
                                 </span>
                               </h3>
                             </div>
@@ -67,7 +95,16 @@ export default function Appointments() {
                                   Date
                                 </span>
                                 <span className="text-muted mt-1 fw-semibold fs-7 w-100">
-                                  <input type="date" className="form-control" />
+                                  <DatePicker
+                                    selected={selectedDate}
+                                    className="form-control pb-2"
+                                    onChange={(date) => {
+                                      setSelectedDate(date);
+                                      setBookingDate(
+                                        getFormattedDate(new Date(date))
+                                      );
+                                    }}
+                                  />
                                 </span>
                               </h3>
                             </div>
@@ -81,6 +118,8 @@ export default function Appointments() {
                                     type="text"
                                     className="form-control"
                                     placeholder="Search..."
+                                    value={search}
+                                    onChange={(e) => setSearch(e.target.value)}
                                   />
                                 </span>
                               </h3>
@@ -93,7 +132,7 @@ export default function Appointments() {
                                   <thead>
                                     <tr className="border-0">
                                       <th>Patient ID</th>
-                                      <th>Date</th>
+                                      <th>Date(yyyy-mm-dd)</th>
                                       <th>Name</th>
                                       <th>Phone</th>
                                       <th className=" min-w-140px">Action</th>
@@ -101,13 +140,16 @@ export default function Appointments() {
                                   </thead>
                                   <tbody>
                                     {data &&
-                                      data.map((item, index) => (
+                                      searchData &&
+                                      searchData.map((item, index) => (
                                         <tr key={index}>
                                           <td className="fw-semibold">
                                             {item?.patient_id}
                                           </td>
                                           <td>
-                                            {formatDate(item?.booking_date)}
+                                            {getFormattedDate(
+                                              item?.booking_date
+                                            )}
                                           </td>
                                           <td>{item?.name}</td>
                                           <td>{item?.phone}</td>
@@ -115,7 +157,7 @@ export default function Appointments() {
                                             <button
                                               onClick={() =>
                                                 router.push(
-                                                  `./appointments-case-add?patient_id=${item?.patient_id}`
+                                                  `./appointments-case-add?p_id=${item?.p_id}`
                                                 )
                                               }
                                               title="Update Appointments"

@@ -6,7 +6,7 @@ import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
 
-export default function CashHistory() {
+export default function CaseHistory() {
   const animatedComponents = makeAnimated();
   const [selectedDate, setSelectedDate] = useState(new Date());
 
@@ -47,7 +47,7 @@ export default function CashHistory() {
   return (
     <>
       <div className="">
-        <h1>Add Cash History</h1>
+        <h1>Add Case History</h1>
         <div className="row pt-5">
           <div className="col-md-4 col-12">
             <div className="pb-5">
@@ -74,7 +74,7 @@ export default function CashHistory() {
           </div>
           <div className="col-md-4 col-12">
             <div className="pb-5">
-              <label htmlFor="paternal">Diseases</label>
+              <label htmlFor="paternal">System</label>
               <Select
                 options={chooseDiseaseOptions}
                 components={animatedComponents}

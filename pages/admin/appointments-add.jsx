@@ -9,35 +9,57 @@ import PersonalInfo from "@/components/PersonalInfo";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
 import PersonalInfoOld from "@/components/PersonalInfoOld";
+import { getFormattedDate } from "@/utils/getDateTimeNow";
 
 export default function Form() {
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const animatedComponents = makeAnimated();
   const { push } = useRouter();
   const [patientType, setPatientType] = useState("new");
   const [form, setForm] = useState({
-    booking_date: "",
+    booking_date: new Date().toISOString(),
     patient_id: "",
     name: "",
     phone: "",
-    sex: "",
+    sex: "Male",
     age: "",
     address: "",
   });
 
+  console.log(form);
+
   const addBtn = async (flag) => {
     // const data = await postAPI("addAppointment", form, null);
     // console.log(data);
-    console.log(flag, form);
     if (flag === "new") {
       const data = await postAPI("appointments/new", form, null);
       if (data?.status) {
+        setForm({
+          booking_date: new Date().toISOString(),
+          patient_id: "",
+          name: "",
+          phone: "",
+          sex: "Male",
+          age: "",
+          address: "",
+        });
         toast.success(`Update: ${data?.message}`);
       } else {
-        toast.error(`Update: ${data?.message}`);
+        console.log(data);
+        toast.error(`Error: ${data?.message}`);
       }
     } else if (flag === "old") {
       const data = await postAPI("appointments/old", form, null);
       if (data?.status) {
+        setForm({
+          booking_date: new Date().toISOString(),
+          patient_id: "",
+          name: "",
+          phone: "",
+          sex: "Male",
+          age: "",
+          address: "",
+        });
         toast.success(`Update: ${data?.message}`);
       } else {
         toast.error(`Update: ${data?.message}`);
@@ -95,6 +117,8 @@ export default function Form() {
                             form={form}
                             setForm={setForm}
                             addBtn={addBtn}
+                            selectedDate={selectedDate}
+                            setSelectedDate={setSelectedDate}
                           />
                         )}
                         {patientType == "old" && (
@@ -102,6 +126,8 @@ export default function Form() {
                             form={form}
                             setForm={setForm}
                             addBtn={addBtn}
+                            selectedDate={selectedDate}
+                            setSelectedDate={setSelectedDate}
                           />
                         )}
                       </div>

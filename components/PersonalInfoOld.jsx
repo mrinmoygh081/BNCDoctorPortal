@@ -1,11 +1,16 @@
+import { getFormattedDate } from "@/utils/getDateTimeNow";
 import React, { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
 
-export default function PersonalInfoOld({ form, setForm, addBtn }) {
-  const [selectedDate, setSelectedDate] = useState(new Date());
-
+export default function PersonalInfoOld({
+  form,
+  setForm,
+  addBtn,
+  selectedDate,
+  setSelectedDate,
+}) {
   const handleInput = (e) => {
     const { name, value } = e.target;
     setForm({ ...form, [name]: value });
@@ -18,14 +23,17 @@ export default function PersonalInfoOld({ form, setForm, addBtn }) {
         <div className="row pt-5">
           <div className="col-md-6 col-12">
             <div className="pb-5">
-              <label htmlFor="date">Booking Date</label>
+              <label htmlFor="date">Date(mm/dd/yyyy)</label>
               <br />
               <DatePicker
                 selected={selectedDate}
                 className="form-control pb-2"
                 onChange={(date) => {
                   setSelectedDate(date);
-                  setForm({ ...form, booking_date: date.toLocaleDateString() });
+                  setForm({
+                    ...form,
+                    booking_date: new Date(date).toISOString(),
+                  });
                 }}
                 minDate={new Date()}
               />

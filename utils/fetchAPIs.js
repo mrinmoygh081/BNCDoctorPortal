@@ -35,17 +35,15 @@ export const getAPI = (path, token) => {
       Authorization: `Bearer ${token}`,
     },
   };
+  console.log("config", config);
 
   return axios(config)
     .then((response) => {
       return response.data;
     })
     .catch((error) => {
-      console.log(error.response.data.errors);
-      toast.error(
-        "Something went wrong! Please contact to the administrator",
-        error.response.data.errors
-      );
+      console.log(error);
+      toast.error("Something went wrong! Please contact to the administrator");
     });
 };
 

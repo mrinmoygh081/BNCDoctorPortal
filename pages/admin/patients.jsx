@@ -103,7 +103,18 @@ export default function Patients() {
                                             <button
                                               onClick={() =>
                                                 router.push(
-                                                  `./patients/${item?.patient_id}`
+                                                  `./appointments-case-add?p_id=${item?.p_id}`
+                                                )
+                                              }
+                                              title="Update Appointments"
+                                              className="btn btn-icon btn-light btn-active-color-primary btn-sm me-1"
+                                            >
+                                              <FontAwesomeIcon icon={faPen} />
+                                            </button>
+                                            <button
+                                              onClick={() =>
+                                                router.push(
+                                                  `./patients/${item?.p_id}`
                                                 )
                                               }
                                               title="Check Details"

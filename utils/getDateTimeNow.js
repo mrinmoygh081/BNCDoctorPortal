@@ -37,9 +37,31 @@ export const formatDate = (date) => {
     month = "" + (d.getMonth() + 1),
     day = "" + d.getDate(),
     year = d.getFullYear();
+  console.log(d);
 
   if (month.length < 2) month = "0" + month;
   if (day.length < 2) day = "0" + day;
 
   return [day, month, year].join("/");
+};
+
+export const formattedDDMMYYYY = (date) => {
+  var datePart = date.match(/\d+/g),
+    year = datePart[0], // get only two digits
+    month = datePart[2],
+    day = datePart[1];
+
+  console.log(datePart);
+
+  return day + "/" + month + "/" + year;
+};
+
+export const getFormattedDate = (date) => {
+  let today = new Date(date);
+  let dd = String(today.getDate()).padStart(2, "0");
+  let mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
+  let yyyy = today.getFullYear();
+
+  today = yyyy + "-" + mm + "-" + dd;
+  return today;
 };

@@ -10,15 +10,17 @@ import FamilyHistory from "@/components/FamilyHistory";
 import PersonalHistory from "@/components/PersonalHistory";
 import Cravings from "@/components/Cravings";
 import Generalities from "@/components/Generalities";
-import CashHistory from "@/components/CashHistory";
+import CashHistory from "@/components/CaseHistory";
 import DoctorForm from "@/components/DoctorForm";
 import LoadingView from "@/components/LoadingView";
 
 export default function Form() {
   const { push, query } = useRouter();
+  const { p_id } = query;
 
   const [isActiveForm, setIsActiveForm] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
+  const [pInfo, setPInfo] = useState(null);
 
   useEffect(() => {
     if (query) {
@@ -26,7 +28,53 @@ export default function Form() {
     }
   }, [query]);
 
-  const addBtn = async () => {};
+  const getPatientInfo = async () => {
+    const data = await getAPI(`patients/${p_id}`, null);
+    if (data?.status) {
+      setPInfo(data?.data[0]);
+    }
+  };
+
+  useEffect(() => {
+    if (p_id) {
+      getPatientInfo();
+    }
+  }, [p_id]);
+
+  const addBtn = async (flag, addForm) => {
+    if (flag === 1) {
+      const data = await postAPI(
+        "appointments/addFamilyHistory",
+        addForm,
+        null
+      );
+      if (data?.status) {
+        toast.success(data?.message);
+        setIsActiveForm(2);
+      }
+    } else if (flag === 2) {
+      const data = await postAPI(
+        "appointments/addPersonalHistory",
+        addForm,
+        null
+      );
+      if (data?.status) {
+        toast.success(data?.message);
+        setIsActiveForm(3);
+      }
+    } else if (flag === 4) {
+      const data = await postAPI("appointments/addCravings", addForm, null);
+      if (data?.status) {
+        toast.success(data?.message);
+        setIsActiveForm(5);
+      }
+    } else if (flag === 5) {
+      const data = await postAPI("appointments/addGeneralities", addForm, null);
+      if (data?.status) {
+        toast.success(data?.message);
+      }
+    }
+  };
 
   return (
     <>
@@ -48,6 +96,9 @@ export default function Form() {
                 <div className="content d-flex flex-column flex-column-fluid">
                   <div className="py_40 shadow screen_header">
                     <div className="container-xxl">
+                      <h3>
+                        Patient Id: {pInfo?.name} ({pInfo?.patient_id})
+                      </h3>
                       <div className="patients_info">
                         <ul>
                           <li
@@ -80,27 +131,37 @@ export default function Form() {
                           >
                             <span>Generalities</span>
                           </li>
-                          <li
+                          {/* <li
                             className={isActiveForm === 6 ? "active" : ""}
                             onClick={() => setIsActiveForm(6)}
                           >
                             <span>Doctor Details</span>
-                          </li>
+                          </li> */}
                         </ul>
                       </div>
 
                       <div className="row g-5 g-xl-8 justify-content-center">
                         <div className="col-md-6 col-12">
-                          {isActiveForm === 6 && <DoctorForm />}
+                          {isActiveForm === 6 && (
+                            <DoctorForm addBtn={addBtn} p_id={p_id} />
+                          )}
                         </div>
                       </div>
-                      {isActiveForm === 5 && <Generalities />}
-                      {isActiveForm === 1 && <FamilyHistory />}
-                      {isActiveForm === 2 && (
-                        <PersonalHistory addBtn={addBtn} />
+                      {isActiveForm === 1 && (
+                        <FamilyHistory addBtn={addBtn} p_id={p_id} />
                       )}
-                      {isActiveForm === 3 && <CashHistory />}
-                      {isActiveForm === 4 && <Cravings />}
+                      {isActiveForm === 2 && (
+                        <PersonalHistory addBtn={addBtn} p_id={p_id} />
+                      )}
+                      {isActiveForm === 3 && (
+                        <CashHistory addBtn={addBtn} p_id={p_id} />
+                      )}
+                      {isActiveForm === 4 && (
+                        <Cravings addBtn={addBtn} p_id={p_id} />
+                      )}
+                      {isActiveForm === 5 && (
+                        <Generalities addBtn={addBtn} p_id={p_id} />
+                      )}
                     </div>
                   </div>
                 </div>

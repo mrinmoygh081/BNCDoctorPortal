@@ -173,7 +173,7 @@ label {
 .generalities {
   width: 100%;
 }
-.toggleBtn span.labelName {
+/* .toggleBtn span.labelName {
   padding-left: 10px;
   font-size: 18px;
   font-weight: 700;
@@ -210,10 +210,14 @@ label {
 
 .toggleBtn input:checked + label {
   background: #cbb852;
-}
+} 
 
 .toggleBtn input:checked + label:before {
   left: 23px;
+}*/
+.toggleBtn label.labelName {
+  padding: 0 8px;
+  font-size: 15px;
 }
 
 .table-border tr,

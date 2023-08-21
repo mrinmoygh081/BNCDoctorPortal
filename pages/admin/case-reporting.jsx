@@ -1,4 +1,4 @@
-import CashHistory from "@/components/CashHistory";
+import CashHistory from "@/components/CaseHistory";
 import Header from "@/components/Header";
 import SideBar from "@/components/SideBar";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";

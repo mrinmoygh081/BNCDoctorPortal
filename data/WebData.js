@@ -49,3 +49,16 @@ export const IPH = [
   "Scabies",
   "Ringworm",
 ];
+
+export const cravings = [
+  "SWEET",
+  "SALTY",
+  "SOUR",
+  "SPICY",
+  "BITTER",
+  "FISH",
+  "MEAT",
+  "DIABETES",
+  "EGG",
+  "ONION",
+];

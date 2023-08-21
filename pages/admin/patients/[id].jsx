@@ -14,14 +14,19 @@ function PatientDetails() {
 
   const getPatients = async () => {
     const d = await getAPI(`patients/${id}`, null);
+    console.log(d);
     if (d?.status) {
       setData(d.data[0]);
     }
   };
 
+  console.log(data);
+
   useEffect(() => {
-    getPatients();
-  }, []);
+    if (id) {
+      getPatients();
+    }
+  }, [id]);
 
   return (
     <>
@@ -56,6 +61,7 @@ function PatientDetails() {
                           </div>
                         </div>
                       </div>
+                      {/* Patient Personal Info */}
                       <div className="col-12 col-md-6">
                         <div className="card card-xxl-stretch mb-5 mb-xxl-8">
                           <div className="card-header border-0 pt-5">
@@ -116,6 +122,8 @@ function PatientDetails() {
                           </div>
                         </div>
                       </div>
+
+                      {/* Personal History */}
                       <div className="col-12 col-md-6">
                         <div className="card card-xxl-stretch mb-5 mb-xxl-8">
                           <div className="card-header border-0 pt-5">
@@ -132,36 +140,68 @@ function PatientDetails() {
                                   <thead></thead>
                                   <tbody>
                                     <tr className="border-0">
-                                      <td className="min-w-150px">Diseases</td>
-                                      <th className="min-w-140px">Diabetis</th>
+                                      <td className="min-w-150px">Infective</td>
+                                      <th className="min-w-140px">
+                                        {JSON.parse(
+                                          data?.infective_history
+                                        ).map((item, index) => (
+                                          <span key={index}>{item}, </span>
+                                        ))}
+                                      </th>
+                                    </tr>
+                                    <tr className="border-0">
+                                      <td className="min-w-150px">Injuries</td>
+                                      <th className="min-w-140px">
+                                        {data?.injuries}
+                                      </th>
                                     </tr>
                                     <tr className="border-0">
                                       <td className="min-w-150px">
                                         Vaccination
                                       </td>
-                                      <th className="min-w-140px">Completed</th>
+                                      <th className="min-w-140px">
+                                        {data?.vaccination}
+                                      </th>
                                     </tr>
                                     <tr className="border-0">
                                       <td className="min-w-150px">
                                         Surgical History
                                       </td>
-                                      <th className="min-w-140px">No</th>
+                                      <th className="min-w-140px">
+                                        {data?.surgical}
+                                      </th>
                                     </tr>
                                     <tr className="border-0">
                                       <td className="min-w-150px">Addiction</td>
-                                      <th className="min-w-140px">Cigeratte</th>
+                                      <th className="min-w-140px">
+                                        {data?.addiction}
+                                      </th>
                                     </tr>
                                     <tr className="border-0">
                                       <td className="min-w-150px">
                                         Marital Status
                                       </td>
-                                      <th className="min-w-140px">Single</th>
+                                      <th className="min-w-140px">
+                                        {data?.marital_status}
+                                      </th>
                                     </tr>
                                     <tr className="border-0">
                                       <td className="min-w-150px">
                                         Number OF Child
                                       </td>
-                                      <th className="min-w-140px">2</th>
+                                      <th className="min-w-140px">
+                                        {data?.num_child}
+                                      </th>
+                                    </tr>
+                                    <tr className="border-0">
+                                      <td className="min-w-150px">Cravings</td>
+                                      <th className="min-w-140px">
+                                        {JSON.parse(data?.cravings).map(
+                                          (item, index) => (
+                                            <span key={index}>{item}, </span>
+                                          )
+                                        )}
+                                      </th>
                                     </tr>
                                   </tbody>
                                 </table>
@@ -170,7 +210,9 @@ function PatientDetails() {
                           </div>
                         </div>
                       </div>
-                      <div className="col-12 col-md-6">
+
+                      {/* Family History */}
+                      <div className="col-12">
                         <div className="card card-xxl-stretch mb-5 mb-xxl-8">
                           <div className="card-header border-0 pt-5">
                             <h3 className="card-title align-items-start flex-column">
@@ -183,22 +225,119 @@ function PatientDetails() {
                             <div className="tab-content">
                               <div className="table-responsive">
                                 <table className="table table-striped table-bordered table_height">
+                                  <thead>
+                                    <tr>
+                                      <th>type</th>
+                                      <th>PATERNAL HISTORY</th>
+                                      <th>MATERNAL HISTORY</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <tr className="border-0">
+                                      <td className="min-w-150px">INFECTIVE</td>
+                                      <td className="min-w-140px">
+                                        {data?.p_infective}
+                                      </td>
+                                      <td>{data?.m_infective}</td>
+                                    </tr>
+                                    <tr className="border-0">
+                                      <td className="min-w-150px">
+                                        NON-INFECTIVE
+                                      </td>
+                                      <td className="min-w-140px">
+                                        {data?.p_noninfective}
+                                      </td>
+                                      <td>{data?.m_noninfective}</td>
+                                    </tr>
+                                    <tr className="border-0">
+                                      <td className="min-w-150px">SURGICAL</td>
+                                      <td className="min-w-140px">
+                                        {data?.p_surgical}
+                                      </td>
+                                      <td>{data?.m_surgical}</td>
+                                    </tr>
+                                    <tr className="border-0">
+                                      <td className="min-w-150px">
+                                        OBS + GYNAE
+                                      </td>
+                                      <td className="min-w-140px">
+                                        {data?.p_obs_gynae}
+                                      </td>
+                                      <td>{data?.m_obs_gynae}</td>
+                                    </tr>
+                                    <tr className="border-0">
+                                      <td className="min-w-150px">PARITY</td>
+                                      <td className="min-w-140px">
+                                        {data?.p_parity}
+                                      </td>
+                                      <td>{data?.m_parity}</td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Generalities  */}
+                      <div className="col-12 col-md-6">
+                        <div className="card card-xxl-stretch mb-5 mb-xxl-8">
+                          <div className="card-header border-0 pt-5">
+                            <h3 className="card-title align-items-start flex-column">
+                              <span className="card-label fw-bold fs-3 mb-1">
+                                Personal History
+                              </span>
+                            </h3>
+                          </div>
+                          <div className="card-body py-3">
+                            <div className="tab-content">
+                              <div className="table-responsive">
+                                <table className="table table-striped table-bordered table_height">
                                   <thead></thead>
                                   <tbody>
                                     <tr className="border-0">
-                                      <td className="min-w-150px">
-                                        Paternal History
-                                      </td>
+                                      <td className="min-w-150px">Sweat</td>
                                       <th className="min-w-140px">
-                                        Diabetic problem of his grandfathers
+                                        {data?.sweat}
+                                      </th>
+                                    </tr>
+                                    <tr className="border-0">
+                                      <td className="min-w-150px">Skin</td>
+                                      <th className="min-w-140px">
+                                        {data?.skin}
                                       </th>
                                     </tr>
                                     <tr className="border-0">
                                       <td className="min-w-150px">
-                                        Maternal History
+                                        Teeth + Gum
                                       </td>
                                       <th className="min-w-140px">
-                                        Diabetic problem of his grandfathers
+                                        {data?.teeth_gum}
+                                      </th>
+                                    </tr>
+                                    <tr className="border-0">
+                                      <td className="min-w-150px">Tongue</td>
+                                      <th className="min-w-140px">
+                                        {data?.tongue}
+                                      </th>
+                                    </tr>
+                                    <tr className="border-0">
+                                      <td className="min-w-150px">Mental</td>
+                                      <th className="min-w-140px">
+                                        {data?.mental}
+                                      </th>
+                                    </tr>
+                                    <tr className="border-0">
+                                      <td className="min-w-150px">Thirst</td>
+                                      <th className="min-w-140px">
+                                        {data?.thirst}
+                                      </th>
+                                    </tr>
+                                    <tr className="border-0">
+                                      <td className="min-w-150px">Dreams</td>
+                                      <th className="min-w-140px">
+                                        {data?.dreams}
                                       </th>
                                     </tr>
                                   </tbody>

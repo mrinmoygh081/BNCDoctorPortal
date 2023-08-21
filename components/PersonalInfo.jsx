@@ -1,14 +1,19 @@
 import React, { useState } from "react";
 import DatePicker from "react-datepicker";
-
 import "react-datepicker/dist/react-datepicker.css";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
 import { chooseSexOptions } from "@/utils/choose";
+import { getFormattedDate } from "@/utils/getDateTimeNow";
 
-export default function PersonalInfo({ form, setForm, addBtn }) {
+export default function PersonalInfo({
+  form,
+  setForm,
+  addBtn,
+  selectedDate,
+  setSelectedDate,
+}) {
   const animatedComponents = makeAnimated();
-  const [selectedDate, setSelectedDate] = useState(new Date());
 
   const handleInput = (e) => {
     const { name, value } = e.target;
@@ -22,13 +27,17 @@ export default function PersonalInfo({ form, setForm, addBtn }) {
         <div className="row pt-5">
           <div className="col-md-6 col-12">
             <div className="pb-5">
-              <label htmlFor="date">Booking Date</label>
+              <label htmlFor="date">Date (mm/dd/yyyy)</label>
               <DatePicker
                 selected={selectedDate}
                 className="form-control pb-2"
                 onChange={(date) => {
+                  console.log(getFormattedDate(new Date(date)));
                   setSelectedDate(date);
-                  setForm({ ...form, booking_date: date.toLocaleDateString() });
+                  setForm({
+                    ...form,
+                    booking_date: new Date(date).toISOString(),
+                  });
                 }}
                 minDate={new Date()}
               />
@@ -116,7 +125,7 @@ export default function PersonalInfo({ form, setForm, addBtn }) {
             onClick={() => addBtn("new")}
             className="btn fw-bold btn-primary"
           >
-            ADD PERSONAL INFO
+            ADD APPOINTMENT
           </button>
         </div>
       </div>
