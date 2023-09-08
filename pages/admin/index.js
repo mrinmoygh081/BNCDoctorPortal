@@ -37,19 +37,19 @@ export default function Home() {
     ],
   });
 
-  // useEffect(() => {
-  //   if (!loginToken) {
-  //     router.push("/admin/login");
-  //   }
-  // }, [loginToken]);
+  useEffect(() => {
+    if (!loginToken) {
+      router.push("/");
+    }
+  }, [loginToken]);
 
   return (
     <>
       <Head>
-        <title>Welcome | The Future Foundation School</title>
+        <title>Welcome | Doctor Panel</title>
         <meta
           name="description"
-          content="Welcome | The Future Foundation School | Admin Panel"
+          content="Welcome | Doctor Panel | Admin Panel"
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />

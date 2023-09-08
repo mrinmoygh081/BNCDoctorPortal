@@ -15,6 +15,7 @@ import {
   formattedDDMMYYYY,
   getFormattedDate,
 } from "@/utils/getDateTimeNow";
+import Link from "next/link";
 
 export default function Appointments() {
   const { loginToken } = useSelector((state) => state.authReducer);
@@ -26,8 +27,13 @@ export default function Appointments() {
   const [search, setSearch] = useState("");
   const [searchData, setSearchData] = useState(null);
 
+  useEffect(() => {
+    if (!loginToken) {
+      push("/");
+    }
+  }, [loginToken]);
+
   const getAppointments = async () => {
-    console.log(bookingDate);
     const d = await postAPI(
       "appointments",
       { booking_date: bookingDate },
@@ -87,6 +93,12 @@ export default function Appointments() {
                                   Total appointments:{" "}
                                   {searchData && searchData.length}
                                 </span>
+                                <Link
+                                  href={"/admin/appointments-add"}
+                                  className="btn btn-light btn-active-color-primary btn-sm me-1"
+                                >
+                                  Add Appointment
+                                </Link>
                               </h3>
                             </div>
                             <div className="card-header border-0 pt-5 w-100">

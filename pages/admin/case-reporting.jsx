@@ -1,12 +1,23 @@
-import CashHistory from "@/components/CaseHistory";
+import CaseReportingCom from "@/components/CaseReporting";
 import Header from "@/components/Header";
 import SideBar from "@/components/SideBar";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Head from "next/head";
-import React from "react";
+import { useRouter } from "next/router";
+import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
 
 function CaseReporting() {
+  const router = useRouter();
+  const { loginToken } = useSelector((state) => state.authReducer);
+
+  useEffect(() => {
+    if (!loginToken) {
+      router.push("/");
+    }
+  }, [loginToken]);
+
   return (
     <>
       <Head>
@@ -25,13 +36,14 @@ function CaseReporting() {
                 <div className="py_40 shadow screen_header">
                   <div className="container-xxl">
                     <div className="row g-5 g-xl-8 justify-content-center">
-                      <div className="col-md-6 col-12">{<CashHistory />}</div>
-                      <div className="col-md-6 col-12">
+                      <div className="col-12">{<CaseReportingCom />}</div>
+                      <div className="col-12">
                         <div className="table-responsive">
                           <table className="table table-striped table-bordered table_height">
                             <thead>
                               <tr className="border-0">
                                 <th>Date</th>
+                                <th className="min-w-140px">Image</th>
                                 <th className="min-w-140px">Remark</th>
                                 <th>Action</th>
                               </tr>
@@ -39,6 +51,7 @@ function CaseReporting() {
                             <tbody>
                               <tr>
                                 <td>05/09/1996</td>
+                                <td></td>
                                 <td>
                                   Mrinmoy Ghosh Lorem ipsum, dolor sit amet
                                   consectetur adipisicing elit. Placeat impedit

@@ -10,11 +10,13 @@ import Select from "react-select";
 import makeAnimated from "react-select/animated";
 import PersonalInfoOld from "@/components/PersonalInfoOld";
 import { getFormattedDate } from "@/utils/getDateTimeNow";
+import { useSelector } from "react-redux";
 
 export default function Form() {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const animatedComponents = makeAnimated();
   const { push } = useRouter();
+  const { loginToken } = useSelector((state) => state.authReducer);
   const [patientType, setPatientType] = useState("new");
   const [form, setForm] = useState({
     booking_date: new Date().toISOString(),
@@ -27,6 +29,12 @@ export default function Form() {
   });
 
   console.log(form);
+
+  useEffect(() => {
+    if (!loginToken) {
+      push("/");
+    }
+  }, [loginToken]);
 
   const addBtn = async (flag) => {
     // const data = await postAPI("addAppointment", form, null);

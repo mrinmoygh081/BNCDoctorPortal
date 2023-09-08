@@ -28,16 +28,14 @@ export default function Form() {
     }
   }, [query]);
 
-  const getPatientInfo = async () => {
-    const data = await getAPI(`patients/${p_id}`, null);
-    if (data?.status) {
-      setPInfo(data?.data[0]);
-    }
-  };
-
   useEffect(() => {
     if (p_id) {
-      getPatientInfo();
+      (async () => {
+        const data = await getAPI(`patients/${p_id}`, null);
+        if (data?.status) {
+          setPInfo(data?.data[0]);
+        }
+      })();
     }
   }, [p_id]);
 
@@ -97,7 +95,7 @@ export default function Form() {
                   <div className="py_40 shadow screen_header">
                     <div className="container-xxl">
                       <h3>
-                        Patient Id: {pInfo?.name} ({pInfo?.patient_id})
+                        Patient: {pInfo?.name} ({pInfo?.patient_id})
                       </h3>
                       <div className="patients_info">
                         <ul>
@@ -153,9 +151,7 @@ export default function Form() {
                       {isActiveForm === 2 && (
                         <PersonalHistory addBtn={addBtn} p_id={p_id} />
                       )}
-                      {isActiveForm === 3 && (
-                        <CashHistory addBtn={addBtn} p_id={p_id} />
-                      )}
+                      {isActiveForm === 3 && <CashHistory p_id={p_id} />}
                       {isActiveForm === 4 && (
                         <Cravings addBtn={addBtn} p_id={p_id} />
                       )}

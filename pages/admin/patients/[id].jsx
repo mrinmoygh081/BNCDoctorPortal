@@ -142,11 +142,13 @@ function PatientDetails() {
                                     <tr className="border-0">
                                       <td className="min-w-150px">Infective</td>
                                       <th className="min-w-140px">
-                                        {JSON.parse(
-                                          data?.infective_history
-                                        ).map((item, index) => (
-                                          <span key={index}>{item}, </span>
-                                        ))}
+                                        {/* {console.log(data?.infective_history)}
+                                        {data?.infective_history &&
+                                          JSON.parse(
+                                            data?.infective_history
+                                          ).map((item, index) => (
+                                            <span key={index}>{item}, </span>
+                                          ))} */}
                                       </th>
                                     </tr>
                                     <tr className="border-0">
@@ -196,11 +198,12 @@ function PatientDetails() {
                                     <tr className="border-0">
                                       <td className="min-w-150px">Cravings</td>
                                       <th className="min-w-140px">
-                                        {JSON.parse(data?.cravings).map(
-                                          (item, index) => (
-                                            <span key={index}>{item}, </span>
-                                          )
-                                        )}
+                                        {/* {data?.cravings &&
+                                          JSON.parse(data?.cravings).map(
+                                            (item, index) => (
+                                              <span key={index}>{item}, </span>
+                                            )
+                                          )} */}
                                       </th>
                                     </tr>
                                   </tbody>

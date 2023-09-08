@@ -5,91 +5,60 @@ import { chooseDiseaseOptions } from "@/utils/choose";
 import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
-import { postAPI, uploadAPI } from "@/utils/fetchAPIs";
-import { toast } from "react-toastify";
 
-export default function CaseHistory({ p_id }) {
+export default function CaseReportingCom() {
   const animatedComponents = makeAnimated();
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [imgFile, setImgFile] = useState(null);
-  const [addForm, setAddForm] = useState({
-    p_id: parseInt(p_id),
-    date: new Date().toISOString(),
-    system: "",
-    image: "",
-    remarks: "",
-  });
 
-  console.log(addForm);
+  const [addForm, setAddForm] = useState({
+    date: new Date(),
+    remark: "",
+  });
 
   const handleInput = (e) => {
     const { name, value } = e.target;
     setAddForm({ ...addForm, [name]: value });
   };
 
-  const handleDropdown = (val) => {
-    setAddForm({ ...addForm, system: val?.value });
-  };
-
-  const handleImgUpload = () => {
-    const uploadAPICall = async () => {
-      let data = await uploadAPI("upload", imgFile[0]);
-      if (data?.status) {
-        console.log(data?.data);
-        return data?.data?.fileName;
-      }
-      return null;
-    };
-    if (imgFile && imgFile.length !== 0) {
-      return uploadAPICall();
-    }
-  };
+  //   useEffect(() => {
+  //     const today = getDateToday();
+  //     console.log("today: " + today);
+  //     setAddForm({ ...addForm, date: new Date(today) });
+  //   }, []);
 
   const addBtn = async () => {
-    let uploadImgData = await handleImgUpload();
-    let formData = null;
-    if (uploadImgData) {
-      // setAddForm({ ...addForm, image: uploadImgData });
-      formData = { ...addForm, image: uploadImgData };
-      toast.success("Disase image uploaded successfully");
-    }
-
-    console.log(addForm);
-    if (formData) {
-      const data = await postAPI("appointments/addCaseHistory", formData, null);
+    if (addForm?.productline_name !== "") {
+      const data = await postAPI("productlines", addForm, null);
       if (data?.status) {
-        toast.success("Case History is added succesfully");
-        // await getData();
+        toast.success("Product Line is added succesfully");
+        await getData();
         setAddForm({
-          p_id: parseInt(p_id),
-          date: new Date().toISOString(),
-          system: "",
-          image: "",
-          remarks: "",
+          date: "",
+          remark: "",
         });
       } else {
-        toast.error("Case History is not added. Try Again!");
+        toast.error("Product data is not added. Try Again!");
       }
+    } else {
+      toast.error("Please fill all the fields");
     }
   };
 
   return (
     <>
       <div className="">
-        <h1>Add Case History</h1>
+        <h1>Add Case Reporting</h1>
         <div className="row pt-5">
           <div className="col-md-4 col-12">
             <div className="pb-5">
-              <label htmlFor="date">Date (mm/dd/yyyy)</label> <br />
+              <label htmlFor="date">Date</label> <br />
               <DatePicker
                 selected={selectedDate}
                 className="form-control pb-2"
+                value={addForm?.date}
                 onChange={(date) => {
                   setSelectedDate(date);
-                  setAddForm({
-                    ...addForm,
-                    date: new Date(date).toISOString(),
-                  });
+                  setAddForm({ ...addForm, date: date.toLocaleDateString() });
                 }}
                 minDate={new Date()}
               />
@@ -101,12 +70,7 @@ export default function CaseHistory({ p_id }) {
               <Select
                 options={chooseDiseaseOptions}
                 components={animatedComponents}
-                isMulti={false}
-                onChange={(val) => handleDropdown(val)}
-                defaultValue={{
-                  label: addForm?.system,
-                  value: addForm?.system,
-                }}
+                isMulti={true}
               ></Select>
             </div>
           </div>
@@ -118,20 +82,20 @@ export default function CaseHistory({ p_id }) {
                 className="form-control pb-2"
                 id="diseases"
                 name="diseases"
-                onChange={(e) => setImgFile(e.target.files)}
-                accept="image/png, image/jpeg, image/jpg"
+                value={addForm?.diseases}
+                onChange={(e) => handleInput(e)}
               />
             </div>
           </div>
           <div className="col-12">
             <div className="pb-5">
-              <label htmlFor="remarks">Remarks</label>
+              <label htmlFor="remark">Remark</label>
               <textarea
-                name="remarks"
-                id="remarks"
+                name="remark"
+                id="remark"
                 rows="6"
                 className="form-control pb-2"
-                value={addForm?.remarks}
+                value={addForm?.remark}
                 onChange={(e) => handleInput(e)}
               ></textarea>
             </div>
@@ -140,7 +104,7 @@ export default function CaseHistory({ p_id }) {
 
         <div className="text-end py-3">
           <button onClick={addBtn} className="btn fw-bold btn-primary">
-            ADD CASH HISTORY
+            ADD CASH REPORTING
           </button>
         </div>
       </div>

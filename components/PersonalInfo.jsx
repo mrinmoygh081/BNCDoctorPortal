@@ -32,7 +32,6 @@ export default function PersonalInfo({
                 selected={selectedDate}
                 className="form-control pb-2"
                 onChange={(date) => {
-                  console.log(getFormattedDate(new Date(date)));
                   setSelectedDate(date);
                   setForm({
                     ...form,

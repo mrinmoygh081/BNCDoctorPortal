@@ -16,6 +16,12 @@ export default function Patients() {
   const [search, setSearch] = useState("");
   const [searchData, setSearchData] = useState(null);
 
+  useEffect(() => {
+    if (!loginToken) {
+      router.push("/");
+    }
+  }, [loginToken]);
+
   const getPatients = async () => {
     const d = await getAPI("patients", null);
     if (d?.status) {

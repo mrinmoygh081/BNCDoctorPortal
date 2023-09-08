@@ -67,3 +67,24 @@ export const putAPI = (path, body, token) => {
       console.log(error);
     });
 };
+
+export const uploadAPI = (path, body, token) => {
+  var formdata = new FormData();
+  formdata.append("image", body);
+
+  let config = {
+    method: "post",
+    maxBodyLength: Infinity,
+    url: `${process.env.NEXT_PUBLIC_BACKEND_API}/${path}`,
+    data: formdata,
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};

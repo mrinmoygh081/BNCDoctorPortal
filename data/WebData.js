@@ -1,16 +1,16 @@
 export const SystemsData = [
   "Gastric",
   "Esophagus",
-  "Intestine/ colon",
+  "Intestine-Colon",
   "Liver",
   "GB",
   "Pancreas",
   "Spleen",
   "Adrenal",
   "Rectum",
-  "Blood / Vascular",
+  "Blood-Vascular",
   "Heart",
-  "lungs/respiratory",
+  "lungs-respiratory",
   "Genital",
   "Kidney",
   "Prostate",
@@ -31,6 +31,7 @@ export const SystemsData = [
   "Breast",
   "Uterus",
   "Ovary",
+  "Others",
 ];
 
 export const IPH = [
