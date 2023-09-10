@@ -5,9 +5,11 @@ export const chooseSexOptions = [
 ];
 
 export const chooseSweatOptions = [
-  { value: "No Sweat", label: "No Sweat" },
-  { value: "Very Sweat", label: "Very Sweat" },
-  { value: "Sweat", label: "Sweat" },
+  { value: "Normal", label: "Normal" },
+  { value: "Palm & Sole", label: "Palm & Sole" },
+  { value: "Profuse", label: "Profuse" },
+  { value: "Less", label: "Less" },
+  { value: "Night", label: "Night" },
 ];
 
 export const chooseThirstOptions = [

@@ -151,9 +151,11 @@ export default function Patients() {
                                             </button>
                                             <button
                                               onClick={() =>
-                                                router.push("./case-reporting")
+                                                router.push(
+                                                  `./case-reporting?p_id=${item?.p_id}`
+                                                )
                                               }
-                                              title="Cash Reporting"
+                                              title="Case Reporting"
                                               className="btn btn-icon btn-light btn-active-color-primary btn-sm me-1"
                                             >
                                               <FontAwesomeIcon

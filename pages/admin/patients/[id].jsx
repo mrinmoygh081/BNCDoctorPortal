@@ -1,14 +1,16 @@
 import Header from "@/components/Header";
 import SideBar from "@/components/SideBar";
 import { getAPI } from "@/utils/fetchAPIs";
+import { faEye, faHistory, faPen } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
-import { useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 
 function PatientDetails() {
   const router = useRouter();
+  const { loginToken } = useSelector((state) => state.authReducer);
   const { id } = router.query;
   const [data, setData] = useState(null);
 
@@ -20,13 +22,17 @@ function PatientDetails() {
     }
   };
 
-  console.log(data);
-
   useEffect(() => {
     if (id) {
       getPatients();
     }
   }, [id]);
+
+  useEffect(() => {
+    if (!loginToken) {
+      router.push("/");
+    }
+  }, [loginToken]);
 
   return (
     <>
@@ -57,7 +63,28 @@ function PatientDetails() {
                                 Details for Patient Id: {data?.patient_id}
                               </span>
                             </h3>
-                            {/* <p>Last Update: 24-06-2023</p> */}
+                            <div>
+                              <button
+                                onClick={() =>
+                                  router.push(
+                                    `../appointments-case-add?p_id=${id}`
+                                  )
+                                }
+                                title="Update Appointments"
+                                className="btn btn-icon btn-light btn-active-color-primary btn-sm me-1"
+                              >
+                                <FontAwesomeIcon icon={faPen} />
+                              </button>
+                              <button
+                                onClick={() =>
+                                  router.push(`../case-reporting?p_id=${id}`)
+                                }
+                                title="Case Reporting"
+                                className="btn btn-icon btn-light btn-active-color-primary btn-sm me-1"
+                              >
+                                <FontAwesomeIcon icon={faHistory} />
+                              </button>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -142,13 +169,12 @@ function PatientDetails() {
                                     <tr className="border-0">
                                       <td className="min-w-150px">Infective</td>
                                       <th className="min-w-140px">
-                                        {/* {console.log(data?.infective_history)}
                                         {data?.infective_history &&
                                           JSON.parse(
                                             data?.infective_history
                                           ).map((item, index) => (
                                             <span key={index}>{item}, </span>
-                                          ))} */}
+                                          ))}
                                       </th>
                                     </tr>
                                     <tr className="border-0">
@@ -198,12 +224,12 @@ function PatientDetails() {
                                     <tr className="border-0">
                                       <td className="min-w-150px">Cravings</td>
                                       <th className="min-w-140px">
-                                        {/* {data?.cravings &&
+                                        {data?.cravings &&
                                           JSON.parse(data?.cravings).map(
                                             (item, index) => (
                                               <span key={index}>{item}, </span>
                                             )
-                                          )} */}
+                                          )}
                                       </th>
                                     </tr>
                                   </tbody>
@@ -289,7 +315,7 @@ function PatientDetails() {
                           <div className="card-header border-0 pt-5">
                             <h3 className="card-title align-items-start flex-column">
                               <span className="card-label fw-bold fs-3 mb-1">
-                                Personal History
+                                Generalities
                               </span>
                             </h3>
                           </div>
@@ -347,6 +373,55 @@ function PatientDetails() {
                                 </table>
                               </div>
                             </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Patient Personal Info */}
+                      <div className="col-12 col-md-6">
+                        <div className="card card-xxl-stretch mb-5 mb-xxl-8">
+                          <div className="card-header border-0 pt-5">
+                            <h3 className="card-title align-items-start flex-column">
+                              <span className="card-label fw-bold fs-3 mb-1">
+                                Case History
+                              </span>
+                            </h3>
+                          </div>
+                          <div className="card-body py-3">
+                            <div className="tab-content">
+                              <div className="table-responsive">
+                                <table className="table table-striped table-bordered table_height">
+                                  <thead></thead>
+                                  <tbody>
+                                    <tr className="border-0">
+                                      <td className="min-w-150px">Date</td>
+                                      <th className="min-w-140px">
+                                        {data?.ch_date}
+                                      </th>
+                                    </tr>
+                                    <tr className="border-0">
+                                      <td className="min-w-150px">System</td>
+                                      <th className="min-w-140px">
+                                        {data?.ch_system}
+                                      </th>
+                                    </tr>
+                                    <tr className="border-0">
+                                      <td className="min-w-150px">Remarks</td>
+                                      <th className="min-w-140px">
+                                        {data?.ch_remarks}
+                                      </th>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
+                            <img
+                              src={
+                                process.env.NEXT_PUBLIC_IMG_PATH +
+                                data?.ch_image
+                              }
+                              alt=""
+                            />
                           </div>
                         </div>
                       </div>

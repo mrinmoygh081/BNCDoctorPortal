@@ -3,6 +3,9 @@ ul {
   padding: 0;
   margin: 0;
 }
+img {
+  max-width: 100%;
+}
 label {
   font-weight: 600;
   padding-bottom: 5px;
@@ -71,6 +74,25 @@ label {
   width: 100%;
   table-layout: fixed;
 }
+
+.table_b tbody {
+  display: block;
+  overflow: auto;
+}
+.table_b thead,
+.table_b tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+.table_b tbody td,
+.table_b tbody th {
+  border-color: #444;
+  border-style: solid;
+  border-width: 1px !important;
+  border-collapse: collapse;
+}
+
 .previewDiv {
   display: flex;
   flex-wrap: wrap;
@@ -218,6 +240,10 @@ label {
 .toggleBtn label.labelName {
   padding: 0 8px;
   font-size: 15px;
+  cursor: pointer;
+}
+.toggleBtn input[type="checkbox"] {
+  cursor: pointer;
 }
 
 .table-border tr,

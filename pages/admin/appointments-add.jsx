@@ -28,8 +28,6 @@ export default function Form() {
     address: "",
   });
 
-  console.log(form);
-
   useEffect(() => {
     if (!loginToken) {
       push("/");

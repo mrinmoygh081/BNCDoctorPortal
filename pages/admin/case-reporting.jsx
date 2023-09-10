@@ -1,22 +1,80 @@
 import CaseReportingCom from "@/components/CaseReporting";
 import Header from "@/components/Header";
 import SideBar from "@/components/SideBar";
-import { faEdit } from "@fortawesome/free-solid-svg-icons";
+import { postAPI } from "@/utils/fetchAPIs";
+import { formattedDDMMYYYY } from "@/utils/getDateTimeNow";
+import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Head from "next/head";
+import Image from "next/image";
 import { useRouter } from "next/router";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import swal from "sweetalert";
 
 function CaseReporting() {
-  const router = useRouter();
+  const { push, query } = useRouter();
+  const { p_id } = query;
   const { loginToken } = useSelector((state) => state.authReducer);
+  const [data, setData] = useState(null);
 
   useEffect(() => {
     if (!loginToken) {
-      router.push("/");
+      push("/");
     }
   }, [loginToken]);
+
+  const getData = async () => {
+    let formData = {
+      p_id: parseInt(p_id),
+    };
+    let da = await postAPI("patients/getReportings", formData, null);
+    if (da?.status) {
+      setData(da?.data);
+      toast.success("Case Reporting list succesfully");
+    } else {
+      toast.error("Case Reporting list is not fetched! Try Again!");
+    }
+  };
+
+  const deleteItem = async (cr_id) => {
+    let formData = {
+      cr_id: parseInt(cr_id),
+    };
+    let da = await postAPI("patients/deleteReporting", formData, null);
+    if (da?.status) {
+      setData(da?.data);
+      toast.success("Case Reporting list succesfully");
+    } else {
+      toast.error("Case Reporting list is not fetched! Try Again!");
+    }
+  };
+
+  const checkDelete = async (cr_id) => {
+    swal({
+      title: "Are you sure?",
+      text: "Once deleted, you will not be able to recover the file!",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then(async (willDelete) => {
+      if (willDelete) {
+        await deleteItem(cr_id);
+        swal("The file has been deleted!", {
+          icon: "success",
+        });
+      }
+    });
+  };
+
+  useEffect(() => {
+    (async () => {
+      if (p_id) {
+        getData();
+      }
+    })();
+  }, [p_id]);
 
   return (
     <>
@@ -36,40 +94,50 @@ function CaseReporting() {
                 <div className="py_40 shadow screen_header">
                   <div className="container-xxl">
                     <div className="row g-5 g-xl-8 justify-content-center">
-                      <div className="col-12">{<CaseReportingCom />}</div>
+                      <div className="col-12">
+                        {p_id ? (
+                          <CaseReportingCom p_id={p_id} getData={getData} />
+                        ) : (
+                          "Try Again!"
+                        )}
+                      </div>
                       <div className="col-12">
                         <div className="table-responsive">
-                          <table className="table table-striped table-bordered table_height">
+                          <table className="table table-striped table-bordered table_b">
                             <thead>
                               <tr className="border-0">
-                                <th>Date</th>
+                                <th>Date (mm/dd/yyyy)</th>
                                 <th className="min-w-140px">Image</th>
                                 <th className="min-w-140px">Remark</th>
                                 <th>Action</th>
                               </tr>
                             </thead>
                             <tbody>
-                              <tr>
-                                <td>05/09/1996</td>
-                                <td></td>
-                                <td>
-                                  Mrinmoy Ghosh Lorem ipsum, dolor sit amet
-                                  consectetur adipisicing elit. Placeat impedit
-                                  animi minus suscipit ex velit natus doloremque
-                                  error sed laudantium, repudiandae vitae sint
-                                  repellat consequuntur veniam ullam praesentium
-                                  fugit ipsa!
-                                </td>
-                                <td>
-                                  <button
-                                    onClick={() => router.push("./patients/1")}
-                                    title="Check Details"
-                                    className="btn btn-icon btn-light btn-active-color-primary btn-sm me-1"
-                                  >
-                                    <FontAwesomeIcon icon={faEdit} />
-                                  </button>
-                                </td>
-                              </tr>
+                              {data &&
+                                data.map((item, index) => (
+                                  <tr key={index}>
+                                    <td>{formattedDDMMYYYY(item?.date)}</td>
+                                    <td>
+                                      <img
+                                        src={
+                                          process.env.NEXT_PUBLIC_IMG_PATH +
+                                          item?.image
+                                        }
+                                        alt=""
+                                      />
+                                    </td>
+                                    <td>{item?.remarks}</td>
+                                    <td>
+                                      <button
+                                        onClick={() => checkDelete(item?.cr_id)}
+                                        title="Delete Item"
+                                        className="btn btn-icon btn-light btn-active-color-primary btn-sm me-1"
+                                      >
+                                        <FontAwesomeIcon icon={faTrash} />
+                                      </button>
+                                    </td>
+                                  </tr>
+                                ))}
                             </tbody>
                           </table>
                         </div>

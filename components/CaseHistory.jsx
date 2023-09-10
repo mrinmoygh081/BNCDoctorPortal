@@ -20,8 +20,6 @@ export default function CaseHistory({ p_id }) {
     remarks: "",
   });
 
-  console.log(addForm);
-
   const handleInput = (e) => {
     const { name, value } = e.target;
     setAddForm({ ...addForm, [name]: value });
@@ -31,11 +29,10 @@ export default function CaseHistory({ p_id }) {
     setAddForm({ ...addForm, system: val?.value });
   };
 
-  const handleImgUpload = () => {
+  const handleImgUpload = async () => {
     const uploadAPICall = async () => {
       let data = await uploadAPI("upload", imgFile[0]);
       if (data?.status) {
-        console.log(data?.data);
         return data?.data?.fileName;
       }
       return null;
@@ -54,7 +51,6 @@ export default function CaseHistory({ p_id }) {
       toast.success("Disase image uploaded successfully");
     }
 
-    console.log(addForm);
     if (formData) {
       const data = await postAPI("appointments/addCaseHistory", formData, null);
       if (data?.status) {
