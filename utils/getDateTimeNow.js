@@ -51,8 +51,6 @@ export const formattedDDMMYYYY = (date) => {
     month = datePart[2],
     day = datePart[1];
 
-  console.log(datePart);
-
   return day + "/" + month + "/" + year;
 };
 
@@ -64,4 +62,8 @@ export const getFormattedDate = (date) => {
 
   today = yyyy + "-" + mm + "-" + dd;
   return today;
+};
+
+export const getDateOnly = (date) => {
+  return date.substring(0, 10);
 };

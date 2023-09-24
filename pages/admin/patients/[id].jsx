@@ -88,6 +88,7 @@ function PatientDetails() {
                           </div>
                         </div>
                       </div>
+
                       {/* Patient Personal Info */}
                       <div className="col-12 col-md-6">
                         <div className="card card-xxl-stretch mb-5 mb-xxl-8">
@@ -367,6 +368,12 @@ function PatientDetails() {
                                       <td className="min-w-150px">Dreams</td>
                                       <th className="min-w-140px">
                                         {data?.dreams}
+                                      </th>
+                                    </tr>
+                                    <tr className="border-0">
+                                      <td className="min-w-150px">Thermal</td>
+                                      <th className="min-w-140px">
+                                        {data?.thermal}
                                       </th>
                                     </tr>
                                   </tbody>

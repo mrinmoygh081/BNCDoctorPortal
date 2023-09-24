@@ -10,11 +10,7 @@ import { getAPI, postAPI, putAPI } from "@/utils/fetchAPIs";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
-import {
-  formatDate,
-  formattedDDMMYYYY,
-  getFormattedDate,
-} from "@/utils/getDateTimeNow";
+import { getFormattedDate } from "@/utils/getDateTimeNow";
 import Link from "next/link";
 
 export default function Appointments() {
@@ -26,6 +22,12 @@ export default function Appointments() {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [search, setSearch] = useState("");
   const [searchData, setSearchData] = useState(null);
+  const [form, setForm] = useState({
+    p_id: "",
+    new_patient_id: "",
+  });
+
+  console.log("bookingDate", bookingDate);
 
   useEffect(() => {
     if (!loginToken) {
@@ -54,11 +56,24 @@ export default function Appointments() {
         (item) =>
           item?.patient_id?.toLowerCase().includes(search.toLowerCase()) ||
           item?.phone?.toLowerCase().includes(search.toLowerCase()) ||
+          item?.appointment_type
+            ?.toLowerCase()
+            .includes(search.toLowerCase()) ||
           item?.name?.toLowerCase().includes(search.toLowerCase())
       );
       setSearchData(s);
     }
   }, [search, data]);
+
+  const editHandler = async () => {
+    const data = await postAPI("patients/editPatientId", form, null);
+    if (data?.status) {
+      await getAppointments();
+      toast.success(data?.message);
+    } else {
+      toast.error(data?.message);
+    }
+  };
 
   return (
     <>
@@ -112,9 +127,8 @@ export default function Appointments() {
                                     className="form-control pb-2"
                                     onChange={(date) => {
                                       setSelectedDate(date);
-                                      setBookingDate(
-                                        getFormattedDate(new Date(date))
-                                      );
+                                      let dd = getFormattedDate(new Date(date));
+                                      setBookingDate(dd);
                                     }}
                                   />
                                 </span>
@@ -147,6 +161,7 @@ export default function Appointments() {
                                       <th>Date(yyyy-mm-dd)</th>
                                       <th>Name</th>
                                       <th>Phone</th>
+                                      <th>Type</th>
                                       <th className=" min-w-140px">Action</th>
                                     </tr>
                                   </thead>
@@ -156,7 +171,23 @@ export default function Appointments() {
                                       searchData.map((item, index) => (
                                         <tr key={index}>
                                           <td className="fw-semibold">
-                                            {item?.patient_id}
+                                            {item?.patient_id}{" "}
+                                            <button
+                                              type="button"
+                                              className="btn btn-sm p-1"
+                                              data-bs-toggle="modal"
+                                              data-bs-target="#modalBtn"
+                                              onClick={(e) =>
+                                                setForm({
+                                                  ...form,
+                                                  p_id: parseInt(item?.p_id),
+                                                  new_patient_id:
+                                                    item?.patient_id,
+                                                })
+                                              }
+                                            >
+                                              <FontAwesomeIcon icon={faPen} />
+                                            </button>
                                           </td>
                                           <td>
                                             {getFormattedDate(
@@ -165,6 +196,7 @@ export default function Appointments() {
                                           </td>
                                           <td>{item?.name}</td>
                                           <td>{item?.phone}</td>
+                                          <td>{item?.appointment_type}</td>
                                           <td>
                                             <button
                                               onClick={() =>
@@ -179,9 +211,11 @@ export default function Appointments() {
                                             </button>
                                             <button
                                               onClick={() =>
-                                                router.push("./case-reporting")
+                                                router.push(
+                                                  `./case-reporting?p_id=${item?.p_id}`
+                                                )
                                               }
-                                              title="Cash Reporting"
+                                              title="Case Reporting"
                                               className="btn btn-icon btn-light btn-active-color-primary btn-sm me-1"
                                             >
                                               <FontAwesomeIcon
@@ -201,6 +235,62 @@ export default function Appointments() {
                     </div>
                   </div>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* <!-- Modal --> */}
+        <div
+          className="modal fade"
+          id="modalBtn"
+          tabIndex="-1"
+          aria-labelledby="modalTitle"
+          aria-hidden="true"
+        >
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title" id="modalTitle">
+                  Edit Patient ID
+                </h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div className="modal-body">
+                <div className="mb-3">
+                  <label htmlFor="patientId">Patient ID</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="patientId"
+                    placeholder="Enter new Patient ID..."
+                    value={form?.new_patient_id}
+                    onChange={(e) =>
+                      setForm({ ...form, new_patient_id: e.target.value })
+                    }
+                  />
+                </div>
+              </div>
+              <div className="modal-footer">
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  data-bs-dismiss="modal"
+                >
+                  CLOSE
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={editHandler}
+                  data-bs-dismiss="modal"
+                >
+                  UPDATE
+                </button>
               </div>
             </div>
           </div>

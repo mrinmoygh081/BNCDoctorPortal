@@ -3,7 +3,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
-import { chooseSexOptions } from "@/utils/choose";
+import { chooseAppointmentTypeOptions, chooseSexOptions } from "@/utils/choose";
 import { getFormattedDate } from "@/utils/getDateTimeNow";
 
 export default function PersonalInfo({
@@ -32,10 +32,11 @@ export default function PersonalInfo({
                 selected={selectedDate}
                 className="form-control pb-2"
                 onChange={(date) => {
+                  console.log(getFormattedDate(new Date(date)));
                   setSelectedDate(date);
                   setForm({
                     ...form,
-                    booking_date: new Date(date).toISOString(),
+                    booking_date: getFormattedDate(new Date(date)),
                   });
                 }}
                 minDate={new Date()}
@@ -87,6 +88,7 @@ export default function PersonalInfo({
               <Select
                 options={chooseSexOptions}
                 components={animatedComponents}
+                defaultValue={chooseSexOptions[0]}
                 isMulti={false}
                 name="sex"
                 onChange={(e) => setForm({ ...form, sex: e.value })}
@@ -106,17 +108,34 @@ export default function PersonalInfo({
               />
             </div>
           </div>
-        </div>
-        <div className="pb-5">
-          <label htmlFor="address">Address</label>
-          <input
-            type="text"
-            className="form-control pb-2"
-            id="address"
-            name="address"
-            value={form?.address}
-            onChange={(e) => handleInput(e)}
-          />
+          <div className="col-md-6 col-12">
+            <div className="pb-5">
+              <label htmlFor="address">Address</label>
+              <input
+                type="text"
+                className="form-control pb-2"
+                id="address"
+                name="address"
+                value={form?.address}
+                onChange={(e) => handleInput(e)}
+              />
+            </div>
+          </div>
+          <div className="col-md-6 col-12">
+            <div className="pb-5">
+              <label htmlFor="address">Appointment Type</label>
+              <Select
+                options={chooseAppointmentTypeOptions}
+                components={animatedComponents}
+                defaultValue={chooseAppointmentTypeOptions[0]}
+                isMulti={false}
+                name="appointment_type"
+                onChange={(e) =>
+                  setForm({ ...form, appointment_type: e.value })
+                }
+              ></Select>
+            </div>
+          </div>
         </div>
 
         <div className="text-end py-3">

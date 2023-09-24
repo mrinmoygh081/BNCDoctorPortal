@@ -1,3 +1,4 @@
+import "bootstrap/dist/css/bootstrap.min.css";
 import "@css/loading.css";
 import "@css/main.css";
 import "@css/style.bundle.css";
@@ -8,6 +9,7 @@ import "@public/assets/plugins/custom/datatables/datatables.bundle.css";
 // import "@fortawesome/fontawesome-svg-core/styles.css";
 // config.autoAddCss = false;
 
+import { useEffect } from "react";
 import { PersistGate } from "redux-persist/integration/react";
 import { wrapper, store, Persistor } from "@/redux/store";
 import { Provider } from "react-redux";
@@ -17,6 +19,10 @@ import { ToastContainer } from "react-toastify";
 import LoadingView from "@/components/LoadingView";
 
 export default function App({ Component, pageProps }) {
+  useEffect(() => {
+    require("bootstrap/dist/js/bootstrap.bundle.min.js");
+  }, []);
+
   return (
     <>
       <Provider store={store}>

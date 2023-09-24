@@ -29,10 +29,11 @@ export default function PersonalInfoOld({
                 selected={selectedDate}
                 className="form-control pb-2"
                 onChange={(date) => {
+                  console.log(getFormattedDate(new Date(date)));
                   setSelectedDate(date);
                   setForm({
                     ...form,
-                    booking_date: new Date(date).toISOString(),
+                    booking_date: getFormattedDate(new Date(date)),
                   });
                 }}
                 minDate={new Date()}

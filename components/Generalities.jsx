@@ -4,6 +4,7 @@ import makeAnimated from "react-select/animated";
 import {
   chooseDreamsOptions,
   chooseSweatOptions,
+  chooseThermalOptions,
   chooseThirstOptions,
 } from "@/utils/choose";
 import { postAPI } from "@/utils/fetchAPIs";
@@ -19,6 +20,7 @@ export default function Generalities({ addBtn, p_id }) {
     mental: "",
     thirst: "",
     dreams: "",
+    thermal: "",
   });
 
   const handleInput = (e) => {
@@ -38,7 +40,9 @@ export default function Generalities({ addBtn, p_id }) {
     setAddForm({ ...addForm, dreams: val?.value });
   };
 
-  console.log(addForm);
+  const handleThermalDropdown = (val) => {
+    setAddForm({ ...addForm, thermal: val?.value });
+  };
 
   const getGeneralities = async () => {
     const data = await postAPI("appointments/getGeneralities", { p_id }, null);
@@ -154,6 +158,21 @@ export default function Generalities({ addBtn, p_id }) {
                 defaultValue={{
                   label: addForm?.dreams,
                   value: addForm?.dreams,
+                }}
+              ></Select>
+            </div>
+          </div>
+          <div className="col-md-4 col-12">
+            <div className="pb-5">
+              <label htmlFor="mental">Thermal Reaction</label>
+              <Select
+                options={chooseThermalOptions}
+                components={animatedComponents}
+                isMulti={false}
+                onChange={(val) => handleThermalDropdown(val)}
+                defaultValue={{
+                  label: addForm?.thermal,
+                  value: addForm?.thermal,
                 }}
               ></Select>
             </div>

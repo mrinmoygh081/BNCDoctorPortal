@@ -15,6 +15,10 @@ export default function Patients() {
   const [data, setData] = useState(null);
   const [search, setSearch] = useState("");
   const [searchData, setSearchData] = useState(null);
+  const [form, setForm] = useState({
+    p_id: "",
+    new_patient_id: "",
+  });
 
   useEffect(() => {
     if (!loginToken) {
@@ -39,11 +43,25 @@ export default function Patients() {
         (item) =>
           item?.patient_id?.toLowerCase().includes(search.toLowerCase()) ||
           item?.phone?.toLowerCase().includes(search.toLowerCase()) ||
+          item?.appointment_type
+            ?.toLowerCase()
+            .includes(search.toLowerCase()) ||
           item?.name?.toLowerCase().includes(search.toLowerCase())
       );
       setSearchData(s);
     }
   }, [search, data]);
+
+  const editHandler = async () => {
+    console.log("Edit", form);
+    const data = await postAPI("patients/editPatientId", form, null);
+    if (data?.status) {
+      await getPatients();
+      toast.success(data?.message);
+    } else {
+      toast.error(data?.message);
+    }
+  };
 
   return (
     <>
@@ -112,6 +130,7 @@ export default function Patients() {
                                       <th>Sex</th>
                                       <th>Age</th>
                                       <th>Address</th>
+                                      <th>Type</th>
                                       <th className=" min-w-140px">Action</th>
                                     </tr>
                                   </thead>
@@ -120,12 +139,31 @@ export default function Patients() {
                                       searchData &&
                                       searchData.map((item, index) => (
                                         <tr key={index}>
-                                          <td>{item?.patient_id}</td>
+                                          <td>
+                                            {item?.patient_id}{" "}
+                                            <button
+                                              type="button"
+                                              className="btn btn-sm p-1"
+                                              data-bs-toggle="modal"
+                                              data-bs-target="#modalBtn"
+                                              onClick={(e) =>
+                                                setForm({
+                                                  ...form,
+                                                  p_id: parseInt(item?.p_id),
+                                                  new_patient_id:
+                                                    item?.patient_id,
+                                                })
+                                              }
+                                            >
+                                              <FontAwesomeIcon icon={faPen} />
+                                            </button>
+                                          </td>
                                           <td>{item?.name}</td>
                                           <td>{item?.phone}</td>
                                           <td>{item?.sex}</td>
                                           <td>{item?.age}</td>
                                           <td>{item?.address}</td>
+                                          <td>{item?.appointment_type}</td>
                                           <td>
                                             <button
                                               onClick={() =>
@@ -175,6 +213,62 @@ export default function Patients() {
                     </div>
                   </div>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* <!-- Modal --> */}
+        <div
+          className="modal fade"
+          id="modalBtn"
+          tabIndex="-1"
+          aria-labelledby="modalTitle"
+          aria-hidden="true"
+        >
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title" id="modalTitle">
+                  Edit Patient ID
+                </h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div className="modal-body">
+                <div className="mb-3">
+                  <label htmlFor="patientId">Patient ID</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="patientId"
+                    placeholder="Enter new Patient ID..."
+                    value={form?.new_patient_id}
+                    onChange={(e) =>
+                      setForm({ ...form, new_patient_id: e.target.value })
+                    }
+                  />
+                </div>
+              </div>
+              <div className="modal-footer">
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  data-bs-dismiss="modal"
+                >
+                  CLOSE
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={editHandler}
+                  data-bs-dismiss="modal"
+                >
+                  UPDATE
+                </button>
               </div>
             </div>
           </div>

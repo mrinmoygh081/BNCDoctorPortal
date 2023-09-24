@@ -19,13 +19,14 @@ export default function Form() {
   const { loginToken } = useSelector((state) => state.authReducer);
   const [patientType, setPatientType] = useState("new");
   const [form, setForm] = useState({
-    booking_date: new Date().toISOString(),
+    booking_date: getFormattedDate(new Date()),
     patient_id: "",
     name: "",
     phone: "",
     sex: "Male",
     age: "",
     address: "",
+    appointment_type: "General",
   });
 
   useEffect(() => {
@@ -34,41 +35,58 @@ export default function Form() {
     }
   }, [loginToken]);
 
+  console.log("Form initialized", form);
+
   const addBtn = async (flag) => {
     // const data = await postAPI("addAppointment", form, null);
     // console.log(data);
-    if (flag === "new") {
-      const data = await postAPI("appointments/new", form, null);
-      if (data?.status) {
-        setForm({
-          booking_date: new Date().toISOString(),
-          patient_id: "",
-          name: "",
-          phone: "",
-          sex: "Male",
-          age: "",
-          address: "",
-        });
-        toast.success(`Update: ${data?.message}`);
-      } else {
-        console.log(data);
-        toast.error(`Error: ${data?.message}`);
-      }
-    } else if (flag === "old") {
-      const data = await postAPI("appointments/old", form, null);
-      if (data?.status) {
-        setForm({
-          booking_date: new Date().toISOString(),
-          patient_id: "",
-          name: "",
-          phone: "",
-          sex: "Male",
-          age: "",
-          address: "",
-        });
-        toast.success(`Update: ${data?.message}`);
-      } else {
-        toast.error(`Update: ${data?.message}`);
+    if (form?.name === "") {
+      toast.warning("Please enter your name");
+    } else if (form?.phone === "") {
+      toast.warning("Please enter your phone");
+    } else if (form?.age === "") {
+      toast.warning("Please enter your age");
+    } else {
+      if (flag === "new") {
+        let formObj = { ...form };
+        if (form?.patient_id === "") {
+          let demoPatientId = `DEMO${Math.round(Math.random() * 10000)}`;
+          formObj = { ...form, patient_id: demoPatientId };
+        }
+        const data = await postAPI("appointments/new", formObj, null);
+        if (data?.status) {
+          setForm({
+            booking_date: getFormattedDate(new Date()),
+            patient_id: "",
+            name: "",
+            phone: "",
+            sex: "Male",
+            age: "",
+            address: "",
+            appointment_type: "General",
+          });
+          toast.success(`Update: ${data?.message}`);
+        } else {
+          // console.log(data);
+          toast.error(`Error: ${data?.message}`);
+        }
+      } else if (flag === "old") {
+        const data = await postAPI("appointments/old", form, null);
+        if (data?.status) {
+          setForm({
+            booking_date: getFormattedDate(new Date(date)),
+            patient_id: "",
+            name: "",
+            phone: "",
+            sex: "Male",
+            age: "",
+            address: "",
+            appointment_type: "General",
+          });
+          toast.success(`Update: ${data?.message}`);
+        } else {
+          toast.error(`Update: ${data?.message}`);
+        }
       }
     }
   };

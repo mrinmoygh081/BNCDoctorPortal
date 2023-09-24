@@ -4,6 +4,11 @@ export const chooseSexOptions = [
   { value: "Transparent", label: "Transparent" },
 ];
 
+export const chooseAppointmentTypeOptions = [
+  { value: "General", label: "General" },
+  { value: "Special", label: "Special" },
+];
+
 export const chooseSweatOptions = [
   { value: "Normal", label: "Normal" },
   { value: "Palm & Sole", label: "Palm & Sole" },
@@ -66,4 +71,10 @@ export const chooseMarritalStatusOptions = [
   { value: "Unmarried", label: "Unmarried" },
   { value: "Widow", label: "Widow" },
   { value: "Divorce", label: "Divorce" },
+];
+
+export const chooseThermalOptions = [
+  { value: "", label: "Choose..." },
+  { value: "Chili", label: "Chili" },
+  { value: "Hot", label: "Hot" },
 ];
