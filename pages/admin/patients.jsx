@@ -140,7 +140,16 @@ export default function Patients() {
                                       searchData.map((item, index) => (
                                         <tr key={index}>
                                           <td>
-                                            {item?.patient_id}{" "}
+                                            <a
+                                              href="#"
+                                              onClick={() =>
+                                                router.push(
+                                                  `./patients/${item?.p_id}`
+                                                )
+                                              }
+                                            >
+                                              {item?.patient_id}{" "}
+                                            </a>
                                             <button
                                               type="button"
                                               className="btn btn-sm p-1"

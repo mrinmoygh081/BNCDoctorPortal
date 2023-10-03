@@ -46,6 +46,7 @@ function CaseReporting() {
     if (da?.status) {
       setData(da?.data);
       toast.success("Case Reporting list succesfully");
+      getData();
     } else {
       toast.error("Case Reporting list is not fetched! Try Again!");
     }
@@ -107,6 +108,7 @@ function CaseReporting() {
                             <thead>
                               <tr className="border-0">
                                 <th>Date (mm/dd/yyyy)</th>
+                                <th>System</th>
                                 <th className="min-w-140px">Image</th>
                                 <th className="min-w-140px">Remark</th>
                                 <th>Action</th>
@@ -117,6 +119,7 @@ function CaseReporting() {
                                 data.map((item, index) => (
                                   <tr key={index}>
                                     <td>{formattedDDMMYYYY(item?.date)}</td>
+                                    <td>{item?.system}</td>
                                     <td>
                                       <img
                                         src={

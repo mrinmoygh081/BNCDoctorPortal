@@ -45,12 +45,14 @@ export default function CaseReportingCom({ p_id, getData }) {
   };
 
   const addBtn = async () => {
-    let uploadImgData = await handleImgUpload();
-    let formData = null;
-    if (uploadImgData) {
-      // setAddForm({ ...addForm, image: uploadImgData });
-      formData = { ...addForm, image: uploadImgData };
-      toast.success("Disase image uploaded successfully");
+    let formData = { ...addForm };
+    if (imgFile) {
+      let uploadImgData = await handleImgUpload();
+      if (uploadImgData) {
+        // setAddForm({ ...addForm, image: uploadImgData });
+        formData = { ...addForm, image: uploadImgData };
+        toast.success("Disase image uploaded successfully");
+      }
     }
 
     if (formData) {
@@ -65,6 +67,7 @@ export default function CaseReportingCom({ p_id, getData }) {
           image: "",
           remarks: "",
         });
+        setImgFile(null);
       } else {
         toast.error("Case Reporting is not added. Try Again!");
       }
