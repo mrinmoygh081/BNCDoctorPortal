@@ -5,13 +5,14 @@ import React, { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHistory, faPen } from "@fortawesome/free-solid-svg-icons";
+import { faHistory, faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { getAPI, postAPI, putAPI } from "@/utils/fetchAPIs";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { getFormattedDate } from "@/utils/getDateTimeNow";
 import Link from "next/link";
+import swal from "sweetalert";
 
 export default function Appointments() {
   const { loginToken } = useSelector((state) => state.authReducer);
@@ -26,8 +27,6 @@ export default function Appointments() {
     p_id: "",
     new_patient_id: "",
   });
-
-  console.log("bookingDate", bookingDate);
 
   useEffect(() => {
     if (!loginToken) {
@@ -73,6 +72,30 @@ export default function Appointments() {
     } else {
       toast.error(data?.message);
     }
+  };
+
+  const delAppointsHandler = async (appointment_id) => {
+    const data = await postAPI("appointments/delete", { appointment_id }, null);
+    if (data?.status) {
+      await getAppointments();
+      toast.success(data?.message);
+    } else {
+      toast.error(data?.message);
+    }
+  };
+
+  const checkAppointDelete = async (appointment_id) => {
+    swal({
+      title: "Are you sure?",
+      text: "The appointment will be deleted.",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then(async (willDelete) => {
+      if (willDelete) {
+        await delAppointsHandler(appointment_id);
+      }
+    });
   };
 
   return (
@@ -171,7 +194,16 @@ export default function Appointments() {
                                       searchData.map((item, index) => (
                                         <tr key={index}>
                                           <td className="fw-semibold">
-                                            {item?.patient_id}{" "}
+                                            <a
+                                              href="#"
+                                              onClick={() =>
+                                                router.push(
+                                                  `./patients/${item?.p_id}`
+                                                )
+                                              }
+                                            >
+                                              {item?.patient_id}
+                                            </a>{" "}
                                             <button
                                               type="button"
                                               className="btn btn-sm p-1"
@@ -221,6 +253,17 @@ export default function Appointments() {
                                               <FontAwesomeIcon
                                                 icon={faHistory}
                                               />
+                                            </button>
+                                            <button
+                                              onClick={() =>
+                                                checkAppointDelete(
+                                                  item?.appointment_id
+                                                )
+                                              }
+                                              title="Case Reporting"
+                                              className="btn btn-icon btn-light btn-active-color-primary btn-sm me-1"
+                                            >
+                                              <FontAwesomeIcon icon={faTrash} />
                                             </button>
                                           </td>
                                         </tr>

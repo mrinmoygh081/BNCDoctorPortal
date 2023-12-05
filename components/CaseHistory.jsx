@@ -43,13 +43,17 @@ export default function CaseHistory({ p_id }) {
   };
 
   const addBtn = async () => {
-    let uploadImgData = await handleImgUpload();
-    let formData = null;
-    if (uploadImgData) {
-      // setAddForm({ ...addForm, image: uploadImgData });
-      formData = { ...addForm, image: uploadImgData };
-      toast.success("Disase image uploaded successfully");
+    let formData = { ...addForm };
+    if (imgFile) {
+      let uploadImgData = await handleImgUpload();
+      if (uploadImgData) {
+        // setAddForm({ ...addForm, image: uploadImgData });
+        formData = { ...addForm, image: uploadImgData };
+        toast.success("Disase image uploaded successfully");
+      }
     }
+
+    console.log(formData);
 
     if (formData) {
       const data = await postAPI("appointments/addCaseHistory", formData, null);
