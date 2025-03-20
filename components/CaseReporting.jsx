@@ -8,17 +8,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import { getAPI, postAPI, uploadAPI } from "@/utils/fetchAPIs";
 import { toast } from "react-toastify";
 
-export default function CaseReportingCom({ p_id, getData }) {
+export default function CaseReportingCom({ p_id, getData, addForm, setAddForm, selectedDate, setSelectedDate, imgFile, setImgFile, isEdit }) {
   const animatedComponents = makeAnimated();
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const [imgFile, setImgFile] = useState(null);
-  const [addForm, setAddForm] = useState({
-    p_id: parseInt(p_id),
-    date: new Date().toISOString(),
-    system: "",
-    image: "",
-    remarks: "",
-  });
   const [pInfo, setPInfo] = useState(null);
 
   const handleInput = (e) => {
@@ -74,6 +65,36 @@ export default function CaseReportingCom({ p_id, getData }) {
     }
   };
 
+  const editBtn = async () => {
+    let formData = { ...addForm };
+    if (imgFile) {
+      let uploadImgData = await handleImgUpload();
+      if (uploadImgData) {
+        // setAddForm({ ...addForm, image: uploadImgData });
+        formData = { ...addForm, image: uploadImgData };
+        toast.success("Disase image uploaded successfully");
+      }
+    }
+
+    if (formData) {
+      const data = await postAPI("patients/addReporting", formData, null);
+      if (data?.status) {
+        toast.success("Case Reporting is added succesfully");
+        await getData();
+        setAddForm({
+          p_id: parseInt(p_id),
+          date: new Date().toISOString(),
+          system: "",
+          image: "",
+          remarks: "",
+        });
+        setImgFile(null);
+      } else {
+        toast.error("Case Reporting is not added. Try Again!");
+      }
+    }
+  };
+
   useEffect(() => {
     if (p_id) {
       (async () => {
@@ -89,7 +110,7 @@ export default function CaseReportingCom({ p_id, getData }) {
     <>
       <div className="">
         <h1>
-          Add Case Reporting for {pInfo?.name} ({pInfo?.patient_id})
+          {isEdit ? "Edit" : "Add"} Case Reporting for {pInfo?.name} ({pInfo?.patient_id})
         </h1>
         <div className="row pt-5">
           <div className="col-md-4 col-12">
@@ -105,7 +126,6 @@ export default function CaseReportingCom({ p_id, getData }) {
                     date: new Date(date).toISOString(),
                   });
                 }}
-                minDate={new Date()}
               />
             </div>
           </div>
@@ -117,7 +137,7 @@ export default function CaseReportingCom({ p_id, getData }) {
                 components={animatedComponents}
                 isMulti={false}
                 onChange={(val) => handleDropdown(val)}
-                defaultValue={{
+                value={{
                   label: addForm?.system,
                   value: addForm?.system,
                 }}
@@ -135,27 +155,27 @@ export default function CaseReportingCom({ p_id, getData }) {
                 onChange={(e) => setImgFile(e.target.files)}
                 accept="image/png, image/jpeg, image/jpg"
               />
+              {imgFile && <img src={URL.createObjectURL(imgFile[0])} alt="" className="img-fluid" />}
             </div>
           </div>
           <div className="col-12">
             <div className="pb-5">
               <label htmlFor="remark">Remark</label>
-              <textarea
-                name="remarks"
-                id="remarks"
-                rows="6"
-                className="form-control pb-2"
-                value={addForm?.remarks}
-                onChange={(e) => handleInput(e)}
-              ></textarea>
+              <textarea name="remarks" id="remarks" rows="6" className="form-control pb-2" value={addForm?.remarks} onChange={(e) => handleInput(e)}></textarea>
             </div>
           </div>
         </div>
 
         <div className="text-end py-3">
-          <button onClick={addBtn} className="btn fw-bold btn-primary">
-            ADD CASE REPORTING
-          </button>
+          {isEdit ? (
+            <button onClick={editBtn} className="btn fw-bold btn-primary">
+              Edit CASE REPORTING
+            </button>
+          ) : (
+            <button onClick={addBtn} className="btn fw-bold btn-primary">
+              ADD CASE REPORTING
+            </button>
+          )}
         </div>
       </div>
     </>

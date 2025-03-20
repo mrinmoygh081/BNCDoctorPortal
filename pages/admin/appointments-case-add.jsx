@@ -11,8 +11,8 @@ import PersonalHistory from "@/components/PersonalHistory";
 import Cravings from "@/components/Cravings";
 import Generalities from "@/components/Generalities";
 import CashHistory from "@/components/CaseHistory";
-import DoctorForm from "@/components/DoctorForm";
 import LoadingView from "@/components/LoadingView";
+import GeneralInfo from "@/components/GeneralInfo";
 
 export default function Form() {
   const { push, query } = useRouter();
@@ -40,6 +40,7 @@ export default function Form() {
   }, [p_id]);
 
   const addBtn = async (flag, addForm) => {
+    console.log("Hello", flag, addForm);
     if (flag === 1) {
       const data = await postAPI(
         "appointments/addFamilyHistory",
@@ -68,6 +69,13 @@ export default function Form() {
       }
     } else if (flag === 5) {
       const data = await postAPI("appointments/addGeneralities", addForm, null);
+      if (data?.status) {
+        toast.success(data?.message);
+        setIsActiveForm(6);
+      }
+    } else if (flag === 6) {
+      const data = await postAPI("patients/editPatientInfo", addForm, null);
+      console.log(data);
       if (data?.status) {
         toast.success(data?.message);
       }
@@ -129,19 +137,19 @@ export default function Form() {
                           >
                             <span>Generalities</span>
                           </li>
-                          {/* <li
+                          <li
                             className={isActiveForm === 6 ? "active" : ""}
                             onClick={() => setIsActiveForm(6)}
                           >
-                            <span>Doctor Details</span>
-                          </li> */}
+                            <span>General</span>
+                          </li>
                         </ul>
                       </div>
 
                       <div className="row g-5 g-xl-8 justify-content-center">
                         <div className="col-md-6 col-12">
                           {isActiveForm === 6 && (
-                            <DoctorForm addBtn={addBtn} p_id={p_id} />
+                            <GeneralInfo addBtn={addBtn} p_id={p_id} />
                           )}
                         </div>
                       </div>

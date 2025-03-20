@@ -53,6 +53,8 @@ export default function CaseHistory({ p_id }) {
       }
     }
 
+    console.log(formData);
+
     if (formData) {
       const data = await postAPI("appointments/addCaseHistory", formData, null);
       if (data?.status) {

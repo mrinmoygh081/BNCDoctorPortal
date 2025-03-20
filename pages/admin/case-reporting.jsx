@@ -18,12 +18,27 @@ function CaseReporting() {
   const { p_id } = query;
   const { loginToken } = useSelector((state) => state.authReducer);
   const [data, setData] = useState(null);
+  const [isPrint, setIsPrint] = useState(false);
+  const [addForm, setAddForm] = useState({
+    p_id: parseInt(p_id),
+    date: new Date().toISOString(),
+    system: "",
+    image: "",
+    remarks: "",
+  });
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [imgFile, setImgFile] = useState(null);
+  const [isEdit, setIsEdit] = useState(false);
 
   useEffect(() => {
     if (!loginToken) {
       push("/");
     }
   }, [loginToken]);
+
+  useEffect(() => {
+    setAddForm({ ...addForm, p_id: parseInt(p_id) });
+  }, [p_id]);
 
   const getData = async () => {
     let formData = {
@@ -45,11 +60,34 @@ function CaseReporting() {
     let da = await postAPI("patients/deleteReporting", formData, null);
     if (da?.status) {
       setData(da?.data);
-      toast.success("Case Reporting list succesfully");
+      toast.success("Case Reporting deleted succesfully");
       getData();
     } else {
-      toast.error("Case Reporting list is not fetched! Try Again!");
+      toast.error("Case Reporting is not deleted! Try Again!");
     }
+  };
+
+  const editItem = async (item) => {
+    const { date, system, image, remarks } = item;
+    console.log(item);
+    setAddForm(item);
+    setSelectedDate(new Date(date));
+    setIsEdit(true);
+    // let formData = {
+    //   cr_id: parseInt(cr_id),
+    //   date,
+    //   system,
+    //   image,
+    //   remarks,
+    // };
+    // let da = await postAPI("patients/editReporting", formData, null);
+    // if (da?.status) {
+    //   setData(da?.data);
+    //   toast.success("Case Reporting updated succesfully");
+    //   getData();
+    // } else {
+    //   toast.error("Case Reporting is not updated! Try Again!");
+    // }
   };
 
   const checkDelete = async (cr_id) => {
@@ -95,14 +133,29 @@ function CaseReporting() {
                 <div className="py_40 shadow screen_header">
                   <div className="container-xxl">
                     <div className="row g-5 g-xl-8 justify-content-center">
+                      {!isPrint && (
+                        <>
+                          <div className="col-12">
+                            {p_id ? (
+                              <CaseReportingCom
+                                p_id={p_id}
+                                getData={getData}
+                                addForm={addForm}
+                                setAddForm={setAddForm}
+                                selectedDate={selectedDate}
+                                setSelectedDate={setSelectedDate}
+                                imgFile={imgFile}
+                                setImgFile={setImgFile}
+                                isEdit={isEdit}
+                              />
+                            ) : (
+                              "Try Again!"
+                            )}
+                          </div>
+                        </>
+                      )}
                       <div className="col-12">
-                        {p_id ? (
-                          <CaseReportingCom p_id={p_id} getData={getData} />
-                        ) : (
-                          "Try Again!"
-                        )}
-                      </div>
-                      <div className="col-12">
+                        <button onClick={() => setIsPrint(!isPrint)}>Print</button>
                         <div className="table-responsive">
                           <table className="table table-striped table-bordered table_b">
                             <thead>
@@ -121,21 +174,14 @@ function CaseReporting() {
                                     <td>{formattedDDMMYYYY(item?.date)}</td>
                                     <td>{item?.system}</td>
                                     <td>
-                                      <img
-                                        src={
-                                          process.env.NEXT_PUBLIC_IMG_PATH +
-                                          item?.image
-                                        }
-                                        alt=""
-                                      />
+                                      <img src={process.env.NEXT_PUBLIC_IMG_PATH + item?.image} alt="" />
                                     </td>
                                     <td>{item?.remarks}</td>
                                     <td>
-                                      <button
-                                        onClick={() => checkDelete(item?.cr_id)}
-                                        title="Delete Item"
-                                        className="btn btn-icon btn-light btn-active-color-primary btn-sm me-1"
-                                      >
+                                      <button onClick={() => editItem(item)} title="Edit Item" className="btn btn-icon btn-light btn-active-color-primary btn-sm me-1">
+                                        <FontAwesomeIcon icon={faEdit} />
+                                      </button>
+                                      <button onClick={() => checkDelete(item?.cr_id)} title="Delete Item" className="btn btn-icon btn-light btn-active-color-primary btn-sm me-1">
                                         <FontAwesomeIcon icon={faTrash} />
                                       </button>
                                     </td>
